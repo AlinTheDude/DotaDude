@@ -1,0 +1,315 @@
+﻿@page
+@model DotaDude.Pages.AdminDashboardModel
+@{
+    ViewData["Title"] = "Admin Dashboard";
+    Layout = "_Layout";
+}
+
+<div class="dashboard-container">
+    @if (!string.IsNullOrEmpty(Model.StatusMessage))
+    {
+        bool isError = Model.StatusMessage.ToLower().Contains("errore");
+        <div class="admin-alert @(isError ? "admin-alert-error" : "admin-alert-success")">
+            <i class="fas @(isError ? "fa-exclamation-circle" : "fa-check-circle")"></i>
+            <span>@Model.StatusMessage</span>
+        </div>
+    }
+
+    <div class="dashboard-header">
+        <h1><i class="fas fa-shield-alt"></i> Dashboard Amministratore</h1>
+        <p>Benvenuto nel pannello di controllo amministrativo di DotaDude</p>
+
+        <div class="dashboard-stats">
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-users"></i></div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Statistics.TotalUsers</span>
+                    <span class="stat-label">Utenti totali</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-user-check"></i></div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Statistics.TotalActiveUsers</span>
+                    <span class="stat-label">Utenti attivi</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-gamepad"></i></div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Statistics.TotalMatchesPlayed</span>
+                    <span class="stat-label">Partite giocate</span>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon"><i class="fas fa-chess-knight"></i></div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Statistics.TotalHeroes</span>
+                    <span class="stat-label">Eroi totali</span>
+                </div>
+            </div>
+            <div class="stat-card wider">
+                <div class="stat-icon"><i class="fas fa-user-plus"></i></div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Statistics.NewUsersLastMonth</span>
+                    <span class="stat-label">Nuovi utenti (ultimo mese)</span>
+                </div>
+            </div>
+            <div class="stat-card wider">
+                <div class="stat-icon"><i class="fas fa-trophy"></i></div>
+                <div class="stat-content">
+                    <span class="stat-value">@Model.Statistics.MostPopularRole</span>
+                    <span class="stat-label">Ruolo più popolare</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="dashboard-update-info">
+            <span><i class="fas fa-sync-alt"></i> Ultimo aggiornamento: @Model.Statistics.LastDatabaseUpdate.ToString("dd/MM/yyyy HH:mm")</span>
+            <a href="#" class="refresh-button" onclick="window.location.reload(); return false;">
+                <i class="fas fa-redo"></i> Aggiorna dati
+            </a>
+        </div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="dashboard-tabs">
+            <div class="tab-header">
+                <button class="tab-button active" onclick="openTab(event, 'users-tab')">
+                    <i class="fas fa-users"></i> Gestione Utenti
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'heroes-tab')">
+                    <i class="fas fa-chess-knight"></i> Eroi
+                </button>
+                <button class="tab-button" onclick="openTab(event, 'settings-tab')">
+                    <i class="fas fa-cogs"></i> Impostazioni
+                </button>
+            </div>
+
+            <div id="users-tab" class="tab-content active">
+                <div class="content-header">
+                    <h2>Gestione Utenti</h2>
+                    <div class="content-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="userSearchInput" onkeyup="searchUsers()" placeholder="Cerca utente...">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-container">
+                    <table id="usersTable" class="admin-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Registrazione</th>
+                                <th>Ultimo Login</th>
+                                <th>Ruolo</th>
+                                <th>Stato</th>
+                                <th>Azioni</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var user in Model.Users)
+                            {
+                                <tr>
+                                    <td>@user.Id</td>
+                                    <td>
+                                        <div class="user-info">
+                                            <img src="@(string.IsNullOrEmpty(user.AvatarUrl) ? "/images/avatars/default.png" : user.AvatarUrl)" alt="@user.Username" class="user-avatar">
+                                            <span>@user.Username</span>
+                                        </div>
+                                    </td>
+                                    <td>@user.Email</td>
+                                    <td>@user.RegistrationDate.ToString("dd/MM/yyyy")</td>
+                                    <td>@(user.LastLoginDate.HasValue ? user.LastLoginDate.Value.ToString("dd/MM/yyyy HH:mm") : "Mai")</td>
+                                    <td>@user.PreferredRole</td>
+                                    <td>
+                                        <span class="status-badge @(user.IsActive ? "active" : "inactive")">
+                                            @(user.IsActive ? "Attivo" : "Inattivo")
+                                        </span>
+                                    </td>
+                                    <td class="actions-cell">
+                                        <div class="table-actions">
+                                            <form method="post" asp-page-handler="ToggleUserStatus" asp-route-userId="@user.Id"
+                                                  onsubmit="return confirm('@(user.IsActive ? "Disattivare" : "Attivare") l\'utente @user.Username?');">
+                                                <button type="submit" class="action-btn @(user.IsActive ? "deactivate" : "activate")" title="@(user.IsActive ? "Disattiva" : "Attiva") utente">
+                                                    <i class="fas @(user.IsActive ? "fa-user-slash" : "fa-user-check")"></i>
+                                                </button>
+                                            </form>
+                                            <form method="post" asp-page-handler="DeleteUser" asp-route-userId="@user.Id"
+                                                  onsubmit="return confirm('Sei sicuro di voler eliminare l\'utente @user.Username? Questa azione è irreversibile.');">
+                                                <button type="submit" class="action-btn delete" title="Elimina utente">
+                                                    <i class="fas fa-trash-alt"></i>
+                                                </button>
+                                            </form>
+                                            <button class="action-btn edit" title="Modifica utente" onclick="alert('Funzionalità in fase di implementazione')">
+                                                <i class="fas fa-pencil-alt"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="heroes-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>Elenco Eroi</h2>
+                    <div class="content-actions">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="heroSearchInput" onkeyup="searchHeroes()" placeholder="Cerca eroe...">
+                        </div>
+                        <div class="filter-dropdown">
+                            <select id="attributeFilter" onchange="filterHeroes()">
+                                <option value="">Tutti gli attributi</option>
+                                <option value="Strength">Forza</option>
+                                <option value="Agility">Agilità</option>
+                                <option value="Intelligence">Intelligenza</option>
+                                <option value="Universal">Universale</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="heroes-grid">
+                    @foreach (var hero in Model.Heroes)
+                    {
+                        <div class="hero-card" data-attribute="@hero.Attribute" data-name="@hero.Name.ToLower()">
+                            <div class="hero-card-inner">
+                                <div class="hero-image" style="background-image: url('@hero.ImageUrl')">
+                                    <div class="hero-attribute-icon @hero.Attribute.ToLower()"></div>
+                                </div>
+                                <div class="hero-details">
+                                    <h3>@hero.Name</h3>
+                                    <div class="hero-meta">
+                                        <span class="hero-role">@hero.Role</span>
+                                        <span class="hero-popularity">
+                                            <i class="fas fa-chart-line"></i> @hero.Popularity.ToString("0.0")%
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="hero-actions">
+                                    <button class="action-btn view" title="Visualizza dettagli"
+                                            onclick="alert('Dettagli eroe in fase di implementazione')">
+                                        <i class="fas fa-eye"></i>
+                                    </button>
+                                    <button class="action-btn edit" title="Modifica eroe"
+                                            onclick="alert('Modifica eroe in fase di implementazione')">
+                                        <i class="fas fa-pencil-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div id="settings-tab" class="tab-content">
+                <div class="content-header">
+                    <h2>Impostazioni Sistema</h2>
+                </div>
+
+                <div class="settings-grid">
+                    <div class="settings-card">
+                        <div class="settings-icon"><i class="fas fa-database"></i></div>
+                        <h3>Manutenzione Database</h3>
+                        <p>Gestisci backup e ripristino del database del sistema.</p>
+                        <button class="admin-button" onclick="alert('Funzionalità in fase di implementazione')">
+                            <i class="fas fa-download"></i> Esegui Backup
+                        </button>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-icon"><i class="fas fa-sync-alt"></i></div>
+                        <h3>Aggiorna Cache</h3>
+                        <p>Aggiorna la cache del sistema e i dati degli eroi.</p>
+                        <button class="admin-button" onclick="alert('Funzionalità in fase di implementazione')">
+                            <i class="fas fa-redo"></i> Aggiorna Cache
+                        </button>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-icon"><i class="fas fa-user-shield"></i></div>
+                        <h3>Gestione Ruoli</h3>
+                        <p>Configura i permessi e gestisci i ruoli del sistema.</p>
+                        <button class="admin-button" onclick="alert('Funzionalità in fase di implementazione')">
+                            <i class="fas fa-user-cog"></i> Configura Ruoli
+                        </button>
+                    </div>
+
+                    <div class="settings-card">
+                        <div class="settings-icon"><i class="fas fa-tools"></i></div>
+                        <h3>Strumenti di Debug</h3>
+                        <p>Accedi agli strumenti per il monitoraggio e la risoluzione dei problemi.</p>
+                        <button class="admin-button" onclick="alert('Funzionalità in fase di implementazione')">
+                            <i class="fas fa-bug"></i> Apri Debug
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    function openTab(evt, tabId) {
+        // Nascondi tutti i contenuti delle tab
+        var tabContent = document.getElementsByClassName("tab-content");
+        for (var i = 0; i < tabContent.length; i++) {
+            tabContent[i].style.display = "none";
+            tabContent[i].classList.remove("active");
+        }
+
+        // Rimuovi la classe "active" da tutti i bottoni
+        var tabButtons = document.getElementsByClassName("tab-button");
+        for (var i = 0; i < tabButtons.length; i++) {
+            tabButtons[i].classList.remove("active");
+        }
+
+        // Mostra la tab corrente
+        document.getElementById(tabId).style.display = "block";
+        document.getElementById(tabId).classList.add("active");
+
+        // Aggiungi la classe "active" al bottone cliccato
+        evt.currentTarget.classList.add("active");
+    }
+
+    function searchUsers() {
+        var input = document.getElementById("userSearchInput");
+        var filter = input.value.toLowerCase();
+        var rows = document.querySelectorAll("#usersTable tbody tr");
+
+        rows.forEach(row => {
+            var username = row.cells[1].textContent.toLowerCase();
+            row.style.display = username.includes(filter) ? "" : "none";
+        });
+    }
+
+    function searchHeroes() {
+        var input = document.getElementById("heroSearchInput");
+        var filter = input.value.toLowerCase();
+        var cards = document.querySelectorAll(".hero-card");
+
+        cards.forEach(card => {
+            var heroName = card.dataset.name;
+            card.style.display = heroName.includes(filter) ? "" : "none";
+        });
+    }
+
+    function filterHeroes() {
+        var filter = document.getElementById("attributeFilter").value.toLowerCase();
+        var cards = document.querySelectorAll(".hero-card");
+
+        cards.forEach(card => {
+            var attribute = card.dataset.attribute.toLowerCase();
+            card.style.display = (filter === "" || attribute === filter) ? "" : "none";
+        });
+    }
+</script>
+

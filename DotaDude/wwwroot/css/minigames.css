@@ -1,0 +1,128 @@
+﻿/* Common Game Styles */
+.score-panel {
+    background-color: rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    padding: 20px;
+    text-align: center;
+}
+
+.score-display, .timer-display, .gold-display {
+    font-size: 2rem;
+    font-weight: bold;
+    color: #c7a758;
+    margin: 10px 0;
+}
+
+.progress-bar {
+    height: 10px;
+}
+
+/* Hero Quiz Styles */
+.ability-list {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+    .ability-list li {
+        background-color: rgba(0, 0, 0, 0.3);
+        padding: 10px 15px;
+        margin-bottom: 10px;
+        border-radius: 5px;
+        border-left: 4px solid #c7a758;
+    }
+
+.option-btn, .trivia-option {
+    transition: all 0.3s ease;
+    text-align: left;
+    padding: 10px 15px;
+}
+
+    .option-btn.correct, .trivia-option.correct, .item-option.correct {
+        background-color: #28a745;
+        border-color: #28a745;
+        color: white;
+        box-shadow: 0 0 10px rgba(40, 167, 69, 0.7);
+    }
+
+    .option-btn.incorrect, .trivia-option.incorrect, .item-option.incorrect {
+        background-color: #dc3545;
+        border-color: #dc3545;
+        color: white;
+        box-shadow: 0 0 10px rgba(220, 53, 69, 0.7);
+    }
+
+    .option-btn.disabled, .trivia-option.disabled, .item-option.disabled {
+        opacity: 0.7;
+        cursor: not-allowed;
+    }
+
+/* Trivia Game Styles */
+.trivia-question {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #c7a758;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+}
+
+.trivia-explanation {
+    background-color: rgba(0, 0, 0, 0.2);
+    padding: 15px;
+    border-radius: 5px;
+    border-left: 4px solid #1a75ff;
+    margin-top: 20px;
+}
+
+.timer-panel {
+    padding-top: 10px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* Item Guesser Game Styles */
+.item-description-box {
+    background-color: rgba(0, 0, 0, 0.3);
+    padding: 20px;
+    border-radius: 5px;
+    margin-bottom: 20px;
+}
+
+.item-option {
+    background-color: rgba(0, 0, 0, 0.3);
+    border: 2px solid #333;
+    border-radius: 5px;
+    padding: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 80px;
+}
+
+    .item-option:hover {
+        border-color: #c7a758;
+        transform: translateY(-3px);
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    }
+
+.item-img {
+    max-width: 100%;
+    max-height: 60px;
+}
+
+.item-components {
+    margin-top: 15px;
+}
+
+#component-list {
+    gap: 10px;
+}
+
+.component-icon {
+    width: 40px;
+    height: 40px;
+    border: 1px solid #333;
+    border-radius: 3px;
+}

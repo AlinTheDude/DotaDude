@@ -1,0 +1,33 @@
+﻿@page "{id:int}"
+@model HeroDetailsModel
+@{
+    ViewData["Title"] = $"{Model.Hero.LocalizedName} - Hero Details";
+}
+
+<div class="row">
+    <div class="col-md-12">
+        <a asp-page="/Heroes" class="dota-btn mb-4">← Back to Heroes</a>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-4">
+        <div class="dota-card">
+            <div class="dota-card-header">
+                <h2>@Model.Hero.LocalizedName</h2>
+            </div>
+            <img src="@Model.Hero.Img" class="img-fluid" alt="@Model.Hero.LocalizedName">
+            <div class="dota-card-body">
+                <div class="hero-attribute mb-3">
+                    <span class="dota-gold-text">Primary Attribute:</span>
+                    <span class="attribute-@Model.Hero.PrimaryAttribute.ToLower()">@Model.Hero.PrimaryAttribute</span>
+                </div>
+
+                <div class="hero-roles mb-3">
+                    <span class="dota-gold-text">Roles:</span>
+                    @string.Join(", ", Model.Hero.Roles)
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

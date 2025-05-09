@@ -1,0 +1,74 @@
+﻿@page
+@model DotaDude.Pages.DbCheckModel
+@{
+    ViewData["Title"] = "Controllo Database";
+}
+
+<div class="container mt-4">
+    <div class="card">
+        <div class="card-header bg-primary text-white">
+            <h2>Controllo Database</h2>
+        </div>
+        <div class="card-body">
+            @if (!string.IsNullOrEmpty(Model.Message))
+            {
+                <div class="alert alert-info">
+                    @Model.Message
+                </div>
+            }
+
+            <h3>Utenti nel Database (@Model.Users.Count)</h3>
+
+            @if (Model.Users.Count > 0)
+            {
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Password Hash</th>
+                            <th>Attivo</th>
+                            <th>Data Registrazione</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var user in Model.Users)
+                        {
+                            <tr class="@(user.Username.ToLower() == "admin" ? "table-primary" : "")">
+                                <td>@user.Id</td>
+                                <td>@user.Username</td>
+                                <td>
+                                    <span class="text-muted" style="font-size: 0.8em;">
+                                        @user.PasswordHash.Substring(0, Math.Min(20, user.PasswordHash.Length))...
+                                    </span>
+                                </td>
+                                <td>@(user.IsActive ? "Sì" : "No")</td>
+                                <td>@(user.RegistrationDate.ToString("dd/MM/yyyy HH:mm"))</td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            }
+            else
+            {
+                <div class="alert alert-warning">
+                    Non ci sono utenti nel database!
+                </div>
+            }
+
+            <div class="mt-4">
+                <form method="post" asp-page-handler="CreateTestUser" class="d-inline">
+                    <button type="submit" class="btn btn-success me-2">Crea Utente di Test</button>
+                </form>
+
+                <form method="post" asp-page-handler="ResetDatabase" class="d-inline"
+                      onsubmit="return confirm('Sei sicuro di voler resettare il database?');">
+                    <button type="submit" class="btn btn-danger">Reset Database</button>
+                </form>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="/AdminLogin" class="btn btn-primary">Torna al Login Admin</a>
+        </div>
+    </div>
+</div>

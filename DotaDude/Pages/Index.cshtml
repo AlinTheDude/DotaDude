@@ -1,0 +1,68 @@
+﻿@page
+@model IndexModel
+@{
+    ViewData["Title"] = "Home";
+}
+
+<div class="row mt-4">
+    <div class="col-md-12">
+        <div class="dota-card">
+            <div class="dota-card-header">
+                <h1>Welcome to DotaDude</h1>
+            </div>
+            <div class="dota-card-body">
+                <div class="row">
+                    <div class="col-md-8">
+                        <h2 class="dota-gold-text">Explore the World of Dota 2</h2>
+                        <p>DotaDude is your ultimate companion for exploring the vast universe of Dota 2. Browse heroes, check match statistics, and enjoy mini-games!</p>
+                        <div class="mt-4">
+                            <a asp-page="/Heroes" class="dota-btn mr-3">Explore Heroes</a>
+                            <a asp-page="/Minigames" class="dota-btn">Play Mini-Games</a>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <img src="~/images/dota-heroes.png" class="img-fluid rounded" alt="Dota 2 Heroes">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="dota-card h-100">
+            <div class="dota-card-header">
+                <h3>Latest Dota 2 Updates</h3>
+            </div>
+            <div class="dota-card-body">
+                <div class="latest-update">
+                    <h4 class="dota-gold-text">Gameplay Update 7.35</h4>
+                    <p>Check out the latest hero balances, item changes, and map updates.</p>
+                    <small>Updated: April 10, 2025</small>
+                </div>
+                <hr class="bg-secondary">
+                <div class="latest-update">
+                    <h4 class="dota-gold-text">New Hero: Void Empress</h4>
+                    <p>Discover the abilities and lore of the newest hero to join the battle.</p>
+                    <small>Updated: March 25, 2025</small>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="dota-card h-100">
+            <div class="dota-card-header">
+                <h3>Featured Mini-Game</h3>
+            </div>
+            <div class="dota-card-body">
+                <h4 class="dota-gold-text">Training Challenge</h4>
+                <p>Test your Dota 2 knowledge by guessing heroes from their ability descriptions. How many can you identify?</p>
+                <div class="text-center mt-4">
+                    <img src="~/images/training.jpg" class="img-fluid rounded mb-3" alt="Mini-game preview">
+                    <a asp-page="/Minigames" class="dota-btn">Play Now</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

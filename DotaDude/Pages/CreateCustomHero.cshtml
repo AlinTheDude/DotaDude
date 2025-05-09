@@ -1,0 +1,428 @@
+﻿@page
+@model DotaDude.Pages.CreateCustomHeroModel
+@{
+    ViewData["Title"] = "Create Your Hero";
+}
+
+<div class="custom-hero-container">
+    <div class="hero-creation-header">
+        <h1 class="dota-header">Create Your Own Hero</h1>
+        <p class="dota-subtext">Design your dream Dota hero with unique abilities and stats</p>
+    </div>
+
+    <form method="post" class="hero-creation-form">
+        @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+        {
+            <div class="alert alert-danger">@Model.ErrorMessage</div>
+        }
+
+        @if (!string.IsNullOrEmpty(Model.SuccessMessage))
+        {
+            <div class="alert alert-success">@Model.SuccessMessage</div>
+        }
+
+        <div class="hero-form-section main-details">
+            <h2 class="section-title">Basic Information</h2>
+
+            <div class="form-group">
+                <label asp-for="CustomHero.Name">Hero Name:</label>
+                <input asp-for="CustomHero.Name" class="form-control dota-input" required />
+                <span asp-validation-for="CustomHero.Name" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomHero.PrimaryAttribute">Primary Attribute:</label>
+                <select asp-for="CustomHero.PrimaryAttribute" class="form-control dota-select" required>
+                    <option value="str">Strength</option>
+                    <option value="agi">Agility</option>
+                    <option value="int">Intelligence</option>
+                </select>
+                <span asp-validation-for="CustomHero.PrimaryAttribute" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomHero.AttackType">Attack Type:</label>
+                <select asp-for="CustomHero.AttackType" class="form-control dota-select" required>
+                    <option value="Melee">Melee</option>
+                    <option value="Ranged">Ranged</option>
+                </select>
+                <span asp-validation-for="CustomHero.AttackType" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label>Roles (Select at least one):</label>
+                <div class="role-checkboxes">
+                    @foreach (var role in Model.AvailableRoles)
+                    {
+                        <div class="role-checkbox">
+                            <input type="checkbox" id="role_@role" name="SelectedRoles" value="@role" 
+                                  @(Model.SelectedRoles != null && Model.SelectedRoles.Contains(role) ? "checked" : "") />
+                            <label for="role_@role">@role</label>
+                        </div>
+                    }
+                </div>
+                <span asp-validation-for="SelectedRoles" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="CustomHero.Lore">Hero Lore:</label>
+                <textarea asp-for="CustomHero.Lore" class="form-control dota-textarea" rows="4"></textarea>
+                <span asp-validation-for="CustomHero.Lore" class="text-danger"></span>
+            </div>
+        </div>
+
+        <div class="hero-form-section attributes">
+            <h2 class="section-title">Attributes</h2>
+
+            <div class="attributes-grid">
+                <div class="attribute-group str">
+                    <h3>Strength</h3>
+                    <div class="form-group">
+                        <label asp-for="CustomHero.BaseStr">Base STR:</label>
+                        <input asp-for="CustomHero.BaseStr" type="number" class="form-control dota-input" min="15" max="30" required />
+                        <span asp-validation-for="CustomHero.BaseStr" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomHero.StrGain">STR Gain:</label>
+                        <input asp-for="CustomHero.StrGain" type="number" step="0.1" class="form-control dota-input" min="1.0" max="4.0" required />
+                        <span asp-validation-for="CustomHero.StrGain" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="attribute-group agi">
+                    <h3>Agility</h3>
+                    <div class="form-group">
+                        <label asp-for="CustomHero.BaseAgi">Base AGI:</label>
+                        <input asp-for="CustomHero.BaseAgi" type="number" class="form-control dota-input" min="15" max="30" required />
+                        <span asp-validation-for="CustomHero.BaseAgi" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomHero.AgiGain">AGI Gain:</label>
+                        <input asp-for="CustomHero.AgiGain" type="number" step="0.1" class="form-control dota-input" min="1.0" max="4.0" required />
+                        <span asp-validation-for="CustomHero.AgiGain" class="text-danger"></span>
+                    </div>
+                </div>
+
+                <div class="attribute-group int">
+                    <h3>Intelligence</h3>
+                    <div class="form-group">
+                        <label asp-for="CustomHero.BaseInt">Base INT:</label>
+                        <input asp-for="CustomHero.BaseInt" type="number" class="form-control dota-input" min="15" max="30" required />
+                        <span asp-validation-for="CustomHero.BaseInt" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label asp-for="CustomHero.IntGain">INT Gain:</label>
+                        <input asp-for="CustomHero.IntGain" type="number" step="0.1" class="form-control dota-input" min="1.0" max="4.0" required />
+                        <span asp-validation-for="CustomHero.IntGain" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-form-section stats">
+            <h2 class="section-title">Combat Stats</h2>
+
+            <div class="stats-grid">
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseHealth">Base Health:</label>
+                    <input asp-for="CustomHero.BaseHealth" type="number" class="form-control dota-input" min="150" max="250" required />
+                    <span asp-validation-for="CustomHero.BaseHealth" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseHealthRegen">Health Regen:</label>
+                    <input asp-for="CustomHero.BaseHealthRegen" type="number" step="0.1" class="form-control dota-input" min="0.5" max="3.0" required />
+                    <span asp-validation-for="CustomHero.BaseHealthRegen" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseMana">Base Mana:</label>
+                    <input asp-for="CustomHero.BaseMana" type="number" class="form-control dota-input" min="75" max="200" required />
+                    <span asp-validation-for="CustomHero.BaseMana" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseManaRegen">Mana Regen:</label>
+                    <input asp-for="CustomHero.BaseManaRegen" type="number" step="0.1" class="form-control dota-input" min="0.5" max="2.0" required />
+                    <span asp-validation-for="CustomHero.BaseManaRegen" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseArmor">Base Armor:</label>
+                    <input asp-for="CustomHero.BaseArmor" type="number" step="0.1" class="form-control dota-input" min="0" max="5.0" required />
+                    <span asp-validation-for="CustomHero.BaseArmor" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.MoveSpeed">Movement Speed:</label>
+                    <input asp-for="CustomHero.MoveSpeed" type="number" class="form-control dota-input" min="270" max="325" required />
+                    <span asp-validation-for="CustomHero.MoveSpeed" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseAttackMin">Min Attack:</label>
+                    <input asp-for="CustomHero.BaseAttackMin" type="number" class="form-control dota-input" min="30" max="60" required />
+                    <span asp-validation-for="CustomHero.BaseAttackMin" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.BaseAttackMax">Max Attack:</label>
+                    <input asp-for="CustomHero.BaseAttackMax" type="number" class="form-control dota-input" min="35" max="70" required />
+                    <span asp-validation-for="CustomHero.BaseAttackMax" class="text-danger"></span>
+                </div>
+
+                <div class="form-group">
+                    <label asp-for="CustomHero.AttackRate">Attack Rate:</label>
+                    <input asp-for="CustomHero.AttackRate" type="number" step="0.1" class="form-control dota-input" min="1.4" max="2.0" required />
+                    <span asp-validation-for="CustomHero.AttackRate" class="text-danger"></span>
+                </div>
+
+                <div class="form-group attack-range-field">
+                    <label asp-for="CustomHero.AttackRange">Attack Range:</label>
+                    <input asp-for="CustomHero.AttackRange" type="number" class="form-control dota-input" />
+                    <span asp-validation-for="CustomHero.AttackRange" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-form-section abilities">
+            <h2 class="section-title">Hero Abilities</h2>
+
+            <div id="abilities-container">
+                <!-- Ability 1 (Q) -->
+                <div class="ability-block" data-ability-index="0">
+                    <h3 class="ability-header">Q Ability</h3>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" name="Abilities[0].Name" class="form-control dota-input" required 
+                              value="@(Model.Abilities.Count > 0 ? Model.Abilities[0].Name : "")" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea name="Abilities[0].Description" class="form-control dota-textarea" rows="2" required>@(Model.Abilities.Count > 0 ? Model.Abilities[0].Description : "")</textarea>
+                    </div>
+                    <div class="ability-details">
+                        <div class="form-group">
+                            <label>Mana Cost:</label>
+                            <input type="text" name="Abilities[0].ManaCost" class="form-control dota-input" placeholder="50/75/100/125" 
+                                  value="@(Model.Abilities.Count > 0 ? Model.Abilities[0].ManaCost : "")" />
+                        </div>
+                        <div class="form-group">
+                            <label>Cooldown:</label>
+                            <input type="text" name="Abilities[0].Cooldown" class="form-control dota-input" placeholder="12/10/8/6" 
+                                  value="@(Model.Abilities.Count > 0 ? Model.Abilities[0].Cooldown : "")" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ability 2 (W) -->
+                <div class="ability-block" data-ability-index="1">
+                    <h3 class="ability-header">W Ability</h3>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" name="Abilities[1].Name" class="form-control dota-input" required 
+                              value="@(Model.Abilities.Count > 1 ? Model.Abilities[1].Name : "")" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea name="Abilities[1].Description" class="form-control dota-textarea" rows="2" required>@(Model.Abilities.Count > 1 ? Model.Abilities[1].Description : "")</textarea>
+                    </div>
+                    <div class="ability-details">
+                        <div class="form-group">
+                            <label>Mana Cost:</label>
+                            <input type="text" name="Abilities[1].ManaCost" class="form-control dota-input" placeholder="50/75/100/125" 
+                                  value="@(Model.Abilities.Count > 1 ? Model.Abilities[1].ManaCost : "")" />
+                        </div>
+                        <div class="form-group">
+                            <label>Cooldown:</label>
+                            <input type="text" name="Abilities[1].Cooldown" class="form-control dota-input" placeholder="12/10/8/6" 
+                                  value="@(Model.Abilities.Count > 1 ? Model.Abilities[1].Cooldown : "")" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ability 3 (E) -->
+                <div class="ability-block" data-ability-index="2">
+                    <h3 class="ability-header">E Ability</h3>
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" name="Abilities[2].Name" class="form-control dota-input" required 
+                              value="@(Model.Abilities.Count > 2 ? Model.Abilities[2].Name : "")" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea name="Abilities[2].Description" class="form-control dota-textarea" rows="2" required>@(Model.Abilities.Count > 2 ? Model.Abilities[2].Description : "")</textarea>
+                    </div>
+                    <div class="ability-details">
+                        <div class="form-group">
+                            <label>Mana Cost:</label>
+                            <input type="text" name="Abilities[2].ManaCost" class="form-control dota-input" placeholder="50/75/100/125" 
+                                  value="@(Model.Abilities.Count > 2 ? Model.Abilities[2].ManaCost : "")" />
+                        </div>
+                        <div class="form-group">
+                            <label>Cooldown:</label>
+                            <input type="text" name="Abilities[2].Cooldown" class="form-control dota-input" placeholder="12/10/8/6" 
+                                  value="@(Model.Abilities.Count > 2 ? Model.Abilities[2].Cooldown : "")" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Ultimate Ability (R) -->
+                <div class="ability-block ultimate" data-ability-index="3">
+                    <h3 class="ability-header">R Ultimate</h3>
+                    <input type="hidden" name="Abilities[3].IsUltimate" value="true" />
+                    <div class="form-group">
+                        <label>Name:</label>
+                        <input type="text" name="Abilities[3].Name" class="form-control dota-input" required 
+                              value="@(Model.Abilities.Count > 3 ? Model.Abilities[3].Name : "")" />
+                    </div>
+                    <div class="form-group">
+                        <label>Description:</label>
+                        <textarea name="Abilities[3].Description" class="form-control dota-textarea" rows="2" required>@(Model.Abilities.Count > 3 ? Model.Abilities[3].Description : "")</textarea>
+                    </div>
+                    <div class="ability-details">
+                        <div class="form-group">
+                            <label>Mana Cost:</label>
+                            <input type="text" name="Abilities[3].ManaCost" class="form-control dota-input" placeholder="150/200/250" 
+                                  value="@(Model.Abilities.Count > 3 ? Model.Abilities[3].ManaCost : "")" />
+                        </div>
+                        <div class="form-group">
+                            <label>Cooldown:</label>
+                            <input type="text" name="Abilities[3].Cooldown" class="form-control dota-input" placeholder="120/100/80" 
+                                  value="@(Model.Abilities.Count > 3 ? Model.Abilities[3].Cooldown : "")" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-form-section visibility">
+            <h2 class="section-title">Visibility Settings</h2>
+
+            <div class="form-group">
+                <div class="visibility-option">
+                    <input type="checkbox" id="isPublic" asp-for="CustomHero.IsPublic" />
+                    <label for="isPublic">Make my hero public</label>
+                    <p class="option-description">If checked, other users will be able to view your hero creation</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="form-actions">
+            <button type="submit" class="dota-button primary-button">Create Hero</button>
+            <a href="/CustomHeroes" class="dota-button secondary-button">Cancel</a>
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Attack type changes attack range defaults
+            const attackTypeSelect = document.querySelector('[name="CustomHero.AttackType"]');
+            const attackRangeInput = document.querySelector('[name="CustomHero.AttackRange"]');
+
+            function updateAttackRange() {
+                if (attackTypeSelect.value === 'Melee') {
+                    attackRangeInput.value = '150';
+                    attackRangeInput.min = '150';
+                    attackRangeInput.max = '200';
+                    attackRangeInput.readOnly = true; // Make read-only for melee
+                } else {
+                    attackRangeInput.value = '550';
+                    attackRangeInput.min = '400';
+                    attackRangeInput.max = '700';
+                    attackRangeInput.readOnly = false; // Allow editing for ranged
+                }
+            }
+
+            // Set initial values
+            updateAttackRange();
+
+            // Update on change
+            attackTypeSelect.addEventListener('change', updateAttackRange);
+
+            // Validate min attack < max attack
+            const minAttackInput = document.querySelector('[name="CustomHero.BaseAttackMin"]');
+            const maxAttackInput = document.querySelector('[name="CustomHero.BaseAttackMax"]');
+
+            function validateAttackValues() {
+                const min = parseInt(minAttackInput.value);
+                const max = parseInt(maxAttackInput.value);
+
+                if (min >= max) {
+                    maxAttackInput.setCustomValidity('Max attack must be greater than min attack');
+                } else {
+                    maxAttackInput.setCustomValidity('');
+                }
+            }
+
+            minAttackInput.addEventListener('input', validateAttackValues);
+            maxAttackInput.addEventListener('input', validateAttackValues);
+
+            // Form submission validation
+            const form = document.querySelector('form.hero-creation-form');
+            form.addEventListener('submit', function(e) {
+                let hasErrors = false;
+                let errorMsg = '';
+
+                // Validate roles
+                const roleCheckboxes = document.querySelectorAll('input[name="SelectedRoles"]:checked');
+                if (roleCheckboxes.length === 0) {
+                    hasErrors = true;
+                    errorMsg = 'Please select at least one role for your hero';
+                }
+
+                // Validate ability names and descriptions
+                const abilityBlocks = document.querySelectorAll('.ability-block');
+                abilityBlocks.forEach(function(block, index) {
+                    const nameInput = block.querySelector(`input[name="Abilities[${index}].Name"]`);
+                    const descInput = block.querySelector(`textarea[name="Abilities[${index}].Description"]`);
+
+                    if (!nameInput.value.trim()) {
+                        hasErrors = true;
+                        errorMsg = `Please provide a name for ${index === 3 ? 'Ultimate' : 'Ability ' + (index + 1)}`;
+                        nameInput.classList.add('is-invalid');
+                    } else {
+                        nameInput.classList.remove('is-invalid');
+                    }
+
+                    if (!descInput.value.trim()) {
+                        hasErrors = true;
+                        errorMsg = `Please provide a description for ${index === 3 ? 'Ultimate' : 'Ability ' + (index + 1)}`;
+                        descInput.classList.add('is-invalid');
+                    } else {
+                        descInput.classList.remove('is-invalid');
+                    }
+                });
+
+                // Validate attack values one more time
+                validateAttackValues();
+                if (maxAttackInput.validity.customError) {
+                    hasErrors = true;
+                    errorMsg = 'Maximum attack must be greater than minimum attack';
+                }
+
+                // If there are errors, prevent form submission
+                if (hasErrors) {
+                    e.preventDefault();
+
+                    // Display error message
+                    const errorElement = document.querySelector('.alert-danger');
+                    if (errorElement) {
+                        errorElement.textContent = errorMsg;
+                        errorElement.style.display = 'block';
+                    } else {
+                        const newErrorElement = document.createElement('div');
+                        newErrorElement.className = 'alert alert-danger';
+                        newErrorElement.textContent = errorMsg;
+                        form.insertBefore(newErrorElement, form.firstChild);
+                    }
+
+                    // Scroll to top to show error
+                    window.scrollTo(0, 0);
+                }
+            });
+        });
+    </script>
+}

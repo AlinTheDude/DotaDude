@@ -1,0 +1,265 @@
+﻿@page "{id:int}"
+@model DotaDude.Pages.CustomHeroDetailsModel
+@{
+    ViewData["Title"] = Model.Hero?.Name ?? "Dettagli Eroe";
+}
+
+<div class="hero-details-container">
+    @if (!string.IsNullOrEmpty(Model.ErrorMessage))
+    {
+        <div class="alert alert-danger">
+            <p>@Model.ErrorMessage</p>
+            <a href="/CustomHeroes" class="dota-button secondary-button">Torna alla Galleria</a>
+        </div>
+    }
+    else
+    {
+        <div class="hero-header-section">
+            <div class="hero-header-content">
+                <div class="hero-portrait-large @Model.Hero.PrimaryAttribute">
+                    @if (!string.IsNullOrEmpty(Model.Hero.ImagePath))
+                    {
+                        <img src="@Model.Hero.ImagePath" alt="@Model.Hero.Name">
+                    }
+                    else
+                    {
+                        <div class="placeholder-portrait-large">
+                            <span class="hero-initial">@Model.Hero.Name.Substring(0, 1)</span>
+                        </div>
+                    }
+                </div>
+
+                <div class="hero-header-info">
+                    <h1 class="dota-header hero-name">@Model.Hero.Name</h1>
+
+                    <div class="hero-primary-details">
+                        <div class="hero-attribute-badge @Model.Hero.PrimaryAttribute">
+                            @switch (Model.Hero.PrimaryAttribute)
+                            {
+                                case "str":
+                                    <span class="attribute-icon str"></span>
+                                    <span>Strength</span>
+                                    break;
+                                case "agi":
+                                    <span class="attribute-icon agi"></span>
+                                    <span>Agility</span>
+                                    break;
+                                case "int":
+                                    <span class="attribute-icon int"></span>
+                                    <span>Intelligence</span>
+                                    break;
+                            }
+                        </div>
+
+                        <div class="hero-type-badge">
+                            <span class="attack-type-icon @Model.Hero.AttackType.ToLower()"></span>
+                            <span>@Model.Hero.AttackType</span>
+                        </div>
+                    </div>
+
+                    <div class="hero-roles-list">
+                        @foreach (var role in Model.Hero.Roles.Split(','))
+                        {
+                            <span class="role-badge">@role</span>
+                        }
+                    </div>
+
+                    <div class="hero-creator-info">
+                        <span>Creato da: <strong>@Model.Hero.Creator.Username</strong></span>
+                        <span class="creation-date">@Model.Hero.CreatedDate.ToString("dd MMMM yyyy")</span>
+                    </div>
+
+                    @if (Model.IsOwner || Model.IsAdmin)
+                    {
+                        <div class="hero-admin-actions">
+                            @if (Model.IsOwner)
+                            {
+                                <a href="/EditCustomHero/@Model.Hero.Id" class="dota-button edit-button">Modifica Eroe</a>
+                            }
+
+                            @if (Model.IsAdmin && !Model.Hero.IsApproved)
+                            {
+                                <form method="post" asp-page-handler="Approve">
+                                    <input type="hidden" name="id" value="@Model.Hero.Id" />
+                                    <button type="submit" class="dota-button admin-button approve">Approva</button>
+                                </form>
+                            }
+
+                            @if (Model.IsAdmin && Model.Hero.IsApproved)
+                            {
+                                <form method="post" asp-page-handler="Unapprove">
+                                    <input type="hidden" name="id" value="@Model.Hero.Id" />
+                                    <button type="submit" class="dota-button admin-button reject">Rimuovi Approvazione</button>
+                                </form>
+                            }
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        @if (!string.IsNullOrEmpty(Model.Hero.Lore))
+        {
+            <div class="hero-lore-section">
+                <h2 class="section-title">Storia dell'Eroe</h2>
+                <div class="lore-text">
+                    <p>@Model.Hero.Lore</p>
+                </div>
+            </div>
+        }
+
+        <div class="hero-details-grid">
+            <div class="hero-stats-section">
+                <h2 class="section-title">Statistiche</h2>
+
+                <div class="attributes-display">
+                    <div class="attribute-block str">
+                        <div class="attribute-header">
+                            <span class="attribute-icon str"></span>
+                            <h3>FORZA</h3>
+                        </div>
+                        <div class="attribute-values">
+                            <div class="base-value">@Model.Hero.BaseStr</div>
+                            <div class="gain-value">+@Model.Hero.StrGain</div>
+                        </div>
+                    </div>
+
+                    <div class="attribute-block agi">
+                        <div class="attribute-header">
+                            <span class="attribute-icon agi"></span>
+                            <h3>AGILITÀ</h3>
+                        </div>
+                        <div class="attribute-values">
+                            <div class="base-value">@Model.Hero.BaseAgi</div>
+                            <div class="gain-value">+@Model.Hero.AgiGain</div>
+                        </div>
+                    </div>
+
+                    <div class="attribute-block int">
+                        <div class="attribute-header">
+                            <span class="attribute-icon int"></span>
+                            <h3>INTELLIGENZA</h3>
+                        </div>
+                        <div class="attribute-values">
+                            <div class="base-value">@Model.Hero.BaseInt</div>
+                            <div class="gain-value">+@Model.Hero.IntGain</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="stats-grid">
+                    <div class="stat-category">
+                        <h3 class="stat-category-title">SALUTE & MANA</h3>
+                        <div class="stat-row">
+                            <div class="stat-name">Salute Base:</div>
+                            <div class="stat-value">@Model.Hero.BaseHealth</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Regen Salute:</div>
+                            <div class="stat-value">@Model.Hero.BaseHealthRegen</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Mana Base:</div>
+                            <div class="stat-value">@Model.Hero.BaseMana</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Regen Mana:</div>
+                            <div class="stat-value">@Model.Hero.BaseManaRegen</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-category">
+                        <h3 class="stat-category-title">MOVIMENTO & DIFESA</h3>
+                        <div class="stat-row">
+                            <div class="stat-name">Velocità:</div>
+                            <div class="stat-value">@Model.Hero.MoveSpeed</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Armatura Base:</div>
+                            <div class="stat-value">@Model.Hero.BaseArmor</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Resist. Magica:</div>
+                            <div class="stat-value">@Model.Hero.BaseMr%</div>
+                        </div>
+                    </div>
+
+                    <div class="stat-category">
+                        <h3 class="stat-category-title">ATTACCO</h3>
+                        <div class="stat-row">
+                            <div class="stat-name">Attacco:</div>
+                            <div class="stat-value">@Model.Hero.BaseAttackMin-@Model.Hero.BaseAttackMax</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Vel. Attacco:</div>
+                            <div class="stat-value">@Model.Hero.AttackRate</div>
+                        </div>
+                        <div class="stat-row">
+                            <div class="stat-name">Raggio:</div>
+                            <div class="stat-value">@Model.Hero.AttackRange</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="hero-abilities-section">
+                <h2 class="section-title">Abilità</h2>
+
+                <div class="abilities-list">
+                    @foreach (var ability in Model.Abilities)
+                    {
+                        <div class="ability-card @(ability.IsUltimate ? "ultimate" : "")">
+                            <div class="ability-header">
+                                <div class="ability-icon">
+                                    @if (!string.IsNullOrEmpty(ability.ImagePath))
+                                    {
+                                        <img src="@ability.ImagePath" alt="@ability.Name">
+                                    }
+                                    else
+                                    {
+                                        <div class="placeholder-ability"></div>
+                                    }
+                                </div>
+                                <h3 class="ability-name">@ability.Name</h3>
+                            </div>
+
+                            <div class="ability-description">
+                                <p>@ability.Description</p>
+                            </div>
+
+                            <div class="ability-stats">
+                                @if (!string.IsNullOrEmpty(ability.ManaCost))
+                                {
+                                    <div class="ability-stat">
+                                        <span class="stat-label">MANA:</span>
+                                        <span class="stat-value">@ability.ManaCost</span>
+                                    </div>
+                                }
+
+                                @if (!string.IsNullOrEmpty(ability.Cooldown))
+                                {
+                                    <div class="ability-stat">
+                                        <span class="stat-label">COOLDOWN:</span>
+                                        <span class="stat-value">@ability.Cooldown</span>
+                                    </div>
+                                }
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+
+        <div class="page-actions">
+            <a href="/CustomHeroes" class="dota-button secondary-button">Torna alla Galleria</a>
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Eventuali script JS specifici per questa pagina
+        });
+    </script>
+}

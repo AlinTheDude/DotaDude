@@ -1,0 +1,36 @@
+html {
+  font-size: 14px;
+}
+
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 60px;
+}
+
+.modal .modal-content {
+    background-color: #1e1e1e;
+    border: 2px solid #d4a017;
+    color: #fff;
+}
+
+.modal .modal-header {
+    border-bottom: 1px solid #d4a017;
+}
+
+.modal .modal-title {
+    color: #d4a017;
+}
+
+.modal .modal-body {
+    background-color: #282828;
+}

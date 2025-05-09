@@ -1,0 +1,284 @@
+﻿@page
+@model DotaDude.Pages.RegisterModel
+@{
+    ViewData["Title"] = "Registrazione";
+}
+
+<div class="auth-container">
+    <!-- Elementi particellari Dota style -->
+    <div class="particles-container">
+        @for (var i = 0; i < 30; i++)
+        {
+            var size = new Random().Next(3, 8);
+            var posX = new Random().Next(5, 95);
+            var posY = new Random().Next(5, 95);
+            var duration = new Random().Next(5, 15);
+            var delay = new Random().Next(0, 7);
+            <div class="auth-ember" style="width: @(size)px; height: @(size)px; left: @(posX)%; bottom: @(posY)%; animation: float-up @(duration)s ease-out @(delay)s infinite;"></div>
+        }
+    </div>
+
+    <div class="auth-frame auth-fade-in">
+        <div class="auth-frame-header">
+            <div class="header-decoration left"></div>
+            <h2>UNISCITI ALLA BATTAGLIA</h2>
+            <div class="header-decoration right"></div>
+        </div>
+        <div class="auth-frame-content">
+
+
+            <div class="row">
+                <div class="col-md-10 offset-md-1">
+                    <form method="post">
+                        <input type="hidden" asp-for="ReturnUrl" />
+
+                        @if (!ModelState.IsValid)
+                        {
+                            <div class="auth-validation-summary">
+                                <div asp-validation-summary="All" class="text-danger"></div>
+                            </div>
+                        }
+                        
+                        <div class="auth-input-group">
+                            <label asp-for="Input.Username" class="auth-label">Nome Eroe</label>
+                            <div class="input-with-icon">
+                                <input asp-for="Input.Username" class="auth-input" />
+                                <span class="auth-input-icon">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Input.Username" class="auth-validation-error"></span>
+                        </div>
+                        
+                        <div class="auth-input-group">
+                            <label asp-for="Input.Email" class="auth-label">Email</label>
+                            <div class="input-with-icon">
+                                <input asp-for="Input.Email" class="auth-input" />
+                                <span class="auth-input-icon">
+                                    <i class="fas fa-envelope"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Input.Email" class="auth-validation-error"></span>
+                        </div>
+                        
+                        <div class="auth-input-group">
+                            <label asp-for="Input.Password" class="auth-label">Password</label>
+                            <div class="input-with-icon">
+                                <input asp-for="Input.Password" class="auth-input password-input" />
+                                <span class="auth-input-icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Input.Password" class="auth-validation-error"></span>
+                            <small class="password-helper">
+                                Minimo 6 caratteri, usa caratteri speciali per maggiore potere
+                            </small>
+                        </div>
+                        
+                        <div class="auth-input-group">
+                            <label asp-for="Input.ConfirmPassword" class="auth-label">Conferma Password</label>
+                            <div class="input-with-icon">
+                                <input asp-for="Input.ConfirmPassword" class="auth-input" />
+                                <span class="auth-input-icon">
+                                    <i class="fas fa-shield-alt"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Input.ConfirmPassword" class="auth-validation-error"></span>
+                        </div>
+
+                        <div class="hero-selection">
+                            <div class="auth-label">Seleziona il tuo ruolo preferito</div>
+                            <input type="hidden" asp-for="Input.PreferredRole" id="preferred-role-input" value="carry" />
+                            <div class="hero-role-options">
+                                <div class="hero-role-option">
+                                    <input type="radio" id="role-carry" name="hero-role" value="carry" checked onchange="updatePreferredRole(this.value)">
+                                    <label for="role-carry">
+                                        <span class="role-icon carry"></span>
+                                        <span class="role-name">Carry</span>
+                                    </label>
+                                </div>
+                                <div class="hero-role-option">
+                                    <input type="radio" id="role-mid" name="hero-role" value="mid" onchange="updatePreferredRole(this.value)">
+                                    <label for="role-mid">
+                                        <span class="role-icon mid"></span>
+                                        <span class="role-name">Mid</span>
+                                    </label>
+                                </div>
+                                <div class="hero-role-option">
+                                    <input type="radio" id="role-offlane" name="hero-role" value="offlane" onchange="updatePreferredRole(this.value)">
+                                    <label for="role-offlane">
+                                        <span class="role-icon offlane"></span>
+                                        <span class="role-name">Offlane</span>
+                                    </label>
+                                </div>
+                                <div class="hero-role-option">
+                                    <input type="radio" id="role-support" name="hero-role" value="support" onchange="updatePreferredRole(this.value)">
+                                    <label for="role-support">
+                                        <span class="role-icon support"></span>
+                                        <span class="role-name">Support</span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="auth-checkbox terms-checkbox">
+                            <input type="checkbox" id="accept-terms" name="accept-terms" required />
+                            <label for="accept-terms">Accetto i <a href="#" class="auth-link">Termini e Condizioni</a> e la <a href="#" class="auth-link">Privacy Policy</a></label>
+                        </div>
+                        
+                        <button type="submit" class="auth-button">
+                            <span class="button-glow"></span>
+                            <span>CREA IL TUO EROE</span>
+                        </button>
+                        
+                        <div class="auth-links">
+                            <p>
+                                Hai già un account? <a asp-page="./Login" class="auth-link">Accedi alla battaglia!</a>
+                            </p>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        <div class="auth-frame-footer">
+            <div class="footer-decoration"></div>
+            <div class="footer-text">© 2025 DotaDude - Tutti i diritti riservati</div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        // Funzione per aggiornare il campo nascosto PreferredRole
+        function updatePreferredRole(role) {
+            document.getElementById('preferred-role-input').value = role;
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            // Effetti sonori
+            const authButtons = document.querySelectorAll('.auth-button');
+            authButtons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    if (window.audioEnabled) {
+                        const hoverSound = new Audio('/sounds/button_hover.mp3');
+                        hoverSound.volume = 0.2;
+                        hoverSound.play();
+                    }
+                });
+                
+                button.addEventListener('click', () => {
+                    if (window.audioEnabled) {
+                        const clickSound = new Audio('/sounds/button_click.mp3');
+                        clickSound.volume = 0.3;
+                        clickSound.play();
+                    }
+                });
+            });
+
+            // Animazione per gli input
+            const authInputs = document.querySelectorAll('.auth-input');
+            authInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.classList.add('input-focused');
+                });
+                input.addEventListener('blur', () => {
+                    input.parentElement.classList.remove('input-focused');
+                });
+            });
+            
+            // Animazione password strength
+            const passwordInput = document.querySelector('.password-input');
+            if (passwordInput) {
+                passwordInput.addEventListener('keyup', function() {
+                    // Calcolo della forza password
+                    const strength = calculatePasswordStrength(this.value);
+                    let strengthClass = '';
+                    let strengthText = '';
+                    
+                    if (strength < 30) {
+                        strengthClass = 'weak';
+                        strengthText = 'Debole come un creep';
+                    } else if (strength < 70) {
+                        strengthClass = 'medium';
+                        strengthText = 'Forte come un eroe';
+                    } else {
+                        strengthClass = 'strong';
+                        strengthText = 'Potente come un Ancient';
+                    }
+                    
+                    // Aggiorna o crea l'elemento della forza password
+                    let strengthMeter = this.parentNode.parentNode.querySelector('.password-strength');
+                    if (!strengthMeter) {
+                        strengthMeter = document.createElement('div');
+                        strengthMeter.className = 'password-strength';
+                        this.parentNode.parentNode.appendChild(strengthMeter);
+                    }
+                    
+                    strengthMeter.innerHTML = `
+                        <div class="strength-bar">
+                            <div class="strength-fill ${strengthClass}" style="width: ${strength}%"></div>
+                        </div>
+                        <div class="strength-text ${strengthClass}">${strengthText}</div>
+                    `;
+                });
+            }
+
+            // Toggle password visibility
+            const passwordInputs = document.querySelectorAll('input[type="password"]');
+            passwordInputs.forEach(input => {
+                const togglePasswordButton = document.createElement('button');
+                togglePasswordButton.type = 'button';
+                togglePasswordButton.className = 'toggle-password';
+                togglePasswordButton.innerHTML = '<i class="fas fa-eye"></i>';
+                togglePasswordButton.addEventListener('click', function() {
+                    const type = input.getAttribute('type') === 'password' ? 'text' : 'password';
+                    input.setAttribute('type', type);
+                    this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+                });
+                
+                // Aggiungi il pulsante dopo l'icona del campo password
+                const passwordIconContainer = input.parentElement;
+                passwordIconContainer.appendChild(togglePasswordButton);
+            });
+            
+            // Funzione per calcolare la forza della password
+            function calculatePasswordStrength(password) {
+                if (!password) return 0;
+                
+                let strength = 0;
+                
+                // Lunghezza
+                strength += password.length * 4;
+                
+                // Lettere
+                if (password.match(/[a-z]/)) strength += 10;
+                if (password.match(/[A-Z]/)) strength += 15;
+                
+                // Numeri
+                if (password.match(/\d/)) strength += 10;
+                if (password.match(/\d.*\d/)) strength += 10;
+                
+                // Caratteri speciali
+                
+                // Penalizzazione per ripetizioni
+                if (password.match(/(.)\1\1/)) strength -= 15;
+                
+                // Limita a 100
+                return Math.min(100, strength);
+            }
+
+            // Effetto sonoro per la selezione del ruolo
+            const roleOptions = document.querySelectorAll('.hero-role-option input');
+            roleOptions.forEach(option => {
+                option.addEventListener('change', () => {
+                    if (window.audioEnabled) {
+                        const roleSound = new Audio('/sounds/role_select.mp3');
+                        roleSound.volume = 0.3;
+                        roleSound.play();
+                    }
+                });
+            });
+        });
+    </script>
+}

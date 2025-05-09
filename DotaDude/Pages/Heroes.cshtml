@@ -1,0 +1,225 @@
+﻿@page
+@model HeroesModel
+@{
+    ViewData["Title"] = "Dota 2 Heroes";
+}
+
+<div class="dota-card mb-4">
+    <div class="dota-card-header">
+        <h1>Dota 2 Heroes</h1>
+    </div>
+    <div class="dota-card-body">
+        <p>Browse through all heroes in Dota 2. Click on a hero to see detailed information, abilities, and statistics.</p>
+
+        @if (!ModelState.IsValid)
+        {
+            <div class="alert alert-danger">
+                <ul>
+                    @foreach (var error in ModelState.Values.SelectMany(v => v.Errors))
+                    {
+                        <li>@error.ErrorMessage</li>
+                    }
+                </ul>
+            </div>
+        }
+
+        @if (Model.Heroes == null || !Model.Heroes.Any())
+        {
+            <div class="alert alert-warning">
+                Nessun eroe trovato. Verificando la connessione all'API OpenDota...
+            </div>
+        }
+        else
+        {
+            <div class="alert alert-success">
+                Trovati @Model.Heroes.Count eroi.
+                Attributi disponibili: @string.Join(", ", Model.Heroes.Select(h => h.PrimaryAttribute).Distinct())
+            </div>
+
+            <div class="row mb-4">
+                <div class="col-md-12">
+                    <div class="btn-group" role="group">
+                        <button type="button" class="dota-btn active" data-filter="all">All</button>
+                        <button type="button" class="dota-btn" data-filter="str">Strength</button>
+                        <button type="button" class="dota-btn" data-filter="agi">Agility</button>
+                        <button type="button" class="dota-btn" data-filter="int">Intelligence</button>
+                        <button type="button" class="dota-btn" data-filter="universal">Universal</button>
+                    </div>
+                </div>
+            </div>
+        }
+    </div>
+</div>
+
+@if (Model.Heroes != null && Model.Heroes.Any())
+{
+    <div class="row" id="heroesContainer">
+        @foreach (var hero in Model.Heroes)
+        {
+            <div class="col-md-2 col-sm-4 col-6 mb-4 hero-item"
+                 data-hero-id="@hero.Id"
+                 data-attribute="@(hero.PrimaryAttribute.ToLower() == "all" ? "universal" : hero.PrimaryAttribute.ToLower())">
+                <a href="javascript:void(0);" class="hero-link" data-hero-id="@hero.Id">
+                    <div class="dota-card hero-card">
+                        <img src="@hero.ImageUrl" class="card-img-top hero-portrait" alt="@hero.LocalizedName">
+                        <div class="card-body p-2 text-center">
+                            <h6 class="card-title mb-0">@hero.LocalizedName</h6>
+                            <small class="text-muted">@hero.PrimaryAttribute</small>
+                        </div>
+                    </div>
+                </a>
+            </div>
+        }
+    </div>
+}
+
+<!-- Modale per i Dettagli dell'Eroe -->
+<div id="heroDetailsModal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content dota-card">
+            <div class="modal-header dota-card-header text-center">
+                <h5 class="modal-title text-center" id="heroDetailsTitle"></h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body dota-card-body text-center" id="heroDetailsContent">
+                <p>Loading...</p>
+            </div>
+            <div class="modal-footer">
+                <h6>Gemini Comments:</h6>
+                <p id="geminiComments">Loading comments...</p>
+                <div id="commentsErrorContainer" class="text-danger" style="display: none;">
+                    <p id="commentsErrorMessage"></p>
+                    <button id="retryCommentsBtn" class="dota-btn dota-btn-sm">Retry</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            console.log("Heroes loaded:", document.querySelectorAll('.hero-item').length);
+
+            // Aggiungiamo event listeners a tutti gli eroi per aprire il modale
+            document.querySelectorAll('.hero-link').forEach(link => {
+                link.addEventListener('click', function () {
+                    const heroId = this.dataset.heroId;
+
+                    console.log("Fetching hero details for Hero ID:", heroId);
+
+                    fetch(`/api/Hero/${heroId}`)
+                        .then(response => {
+                            console.log("API Response Status:", response.status);
+                            if (!response.ok) {
+                                throw new Error(`Failed to fetch hero details. Status: ${response.status}`);
+                            }
+                            return response.json();
+                        })
+                        .then(hero => {
+                            console.log("Hero Details:", hero);
+
+                            document.getElementById('heroDetailsTitle').innerText = hero.localizedName || "No Name";
+                            document.getElementById('heroDetailsContent').innerHTML = `
+                                <div class="hero-stats text-center">
+                                    <h5 class="dota-gold-text">Hero Details</h5>
+                                    <p><strong>Primary Attribute:</strong> ${hero.primaryAttribute || "N/A"}</p>
+                                    <p><strong>Strength:</strong> ${hero.baseStr || 0} + ${hero.strGain || 0}</p>
+                                    <p><strong>Agility:</strong> ${hero.baseAgi || 0} + ${hero.agiGain || 0}</p>
+                                    <p><strong>Intelligence:</strong> ${hero.baseInt || 0} + ${hero.intGain || 0}</p>
+                                    <p><strong>Health:</strong> ${hero.baseHealth || 0}</p>
+                                    <p><strong>Mana:</strong> ${hero.baseMana || 0}</p>
+                                    <p><strong>Damage:</strong> ${hero.baseAttackMin || 0} - ${hero.baseAttackMax || 0}</p>
+                                    <p><strong>Move Speed:</strong> ${hero.moveSpeed || 0}</p>
+                                </div>`;
+
+                            document.getElementById('geminiComments').innerText = "Loading comments...";
+                            document.getElementById('commentsErrorContainer').style.display = 'none';
+
+                            fetchHeroComments(hero.id);
+
+
+                            new bootstrap.Modal(document.getElementById('heroDetailsModal')).show();
+                        })
+                        .catch(error => {
+                            console.error("Error:", error.message);
+                            alert("Failed to load hero details.");
+                        });
+                });
+            });
+
+            function fetchHeroComments(heroId) {
+                fetch(`/api/Hero/${heroId}/comments`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error(`Failed to fetch comments. Status: ${response.status}`);
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        document.getElementById('geminiComments').innerText = data.comments || "No comments available.";
+                    })
+                    .catch(error => {
+                        console.error("Error fetching comments:", error);
+                        document.getElementById('geminiComments').innerText = "Failed to load comments.";
+
+                        // Mostra l'errore e il pulsante di ripetizione
+                        document.getElementById('commentsErrorContainer').style.display = 'block';
+                        document.getElementById('commentsErrorMessage').innerText =
+                            "Impossibile caricare i commenti. Limite di richieste API raggiunto?";
+                    });
+            }
+
+            // Event listener per il pulsante di ripetizione
+            document.getElementById('retryCommentsBtn').addEventListener('click', function() {
+                if (currentHeroId) {
+                    document.getElementById('geminiComments').innerText = "Loading comments...";
+                    document.getElementById('commentsErrorContainer').style.display = 'none';
+                    fetchHeroComments(currentHeroId);
+                }
+            });
+
+
+            // Aggiungiamo event listeners ai pulsanti di filtro
+            document.querySelectorAll('.btn-group .dota-btn').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    // Reset all buttons
+                    document.querySelectorAll('.btn-group .dota-btn').forEach(b => {
+                        b.classList.remove('active');
+                    });
+
+                    // Set active button
+                    this.classList.add('active');
+
+                    // Get filter value
+                    const filter = this.dataset.filter;
+                    console.log("Filtering by:", filter);
+
+                    // Filter heroes
+                    filterHeroes(filter);
+                });
+            });
+        });
+
+        function filterHeroes(attribute) {
+            const heroes = document.querySelectorAll('.hero-item');
+            let visibleCount = 0;
+
+            heroes.forEach(hero => {
+                const heroAttr = hero.dataset.attribute;
+
+                // Show all heroes if "all" is selected, otherwise filter by attribute
+                if (attribute === 'all' || heroAttr === attribute) {
+                    hero.style.display = 'block';
+                    visibleCount++;
+                } else {
+                    hero.style.display = 'none';
+                }
+            });
+
+            console.log(`Showing ${visibleCount} heroes after filtering.`);
+        }
+    </script>
+}

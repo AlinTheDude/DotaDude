@@ -1,0 +1,9 @@
+# Ignora file e cartelle di Visual Studio
+.vs/
+*.user
+*.suo
+*.log
+
+# Ignora cartelle di compilazione
+bin/
+obj/

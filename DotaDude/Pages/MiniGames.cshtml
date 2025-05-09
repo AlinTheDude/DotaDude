@@ -1,0 +1,221 @@
+﻿@page
+@model MinigamesModel
+@{
+    ViewData["Title"] = "Mini-Games";
+}
+
+<div class="dota-card mb-4">
+    <div class="dota-card-header">
+        <h1>Dota 2 Mini-Games</h1>
+    </div>
+    <div class="dota-card-body">
+        <p>Test your knowledge and skills with these Dota 2 themed mini-games!</p>
+    </div>
+</div>
+
+<div class="row">
+    @foreach (var minigame in Model.Minigames)
+    {
+        <div class="col-md-4 mb-4">
+            <div class="dota-card h-100">
+                <div class="dota-card-body">
+                    <h3 class="dota-gold-text">@minigame.Name</h3>
+                    <p>@minigame.Description</p>
+                    <a href="#" class="dota-btn" onclick="startGame('@minigame.GameType')">Play</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<div id="game-container" class="mt-4" style="display: none;">
+    <div class="dota-card">
+        <div class="dota-card-header">
+            <h2 id="game-title">Game Title</h2>
+        </div>
+        <div class="dota-card-body">
+            <!-- Hero Quiz Game -->
+            <div id="hero-quiz-game" style="display: none;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div id="quiz-question" class="mb-4">
+                            <h4 class="dota-gold-text">Which hero has these abilities?</h4>
+                            <ul class="ability-list">
+                                <li><strong>Ability 1:</strong> <span id="ability1"></span></li>
+                                <li><strong>Ability 2:</strong> <span id="ability2"></span></li>
+                                <li><strong>Ability 3:</strong> <span id="ability3"></span></li>
+                                <li><strong>Ultimate:</strong> <span id="ability4"></span></li>
+                            </ul>
+                        </div>
+
+                        <div id="quiz-options" class="mb-4">
+                            <div class="row">
+                                <div class="col-md-6 mb-3">
+                                    <button class="dota-btn w-100 option-btn" data-index="0"></button>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button class="dota-btn w-100 option-btn" data-index="1"></button>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button class="dota-btn w-100 option-btn" data-index="2"></button>
+                                </div>
+                                <div class="col-md-6 mb-3">
+                                    <button class="dota-btn w-100 option-btn" data-index="3"></button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="quiz-feedback" class="alert" style="display: none;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="score-panel">
+                            <h4 class="dota-gold-text">Score</h4>
+                            <div class="score-display">
+                                <span id="current-score">0</span>/<span id="total-questions">10</span>
+                            </div>
+                            <div class="progress mt-3">
+                                <div id="quiz-progress" class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                            </div>
+
+                            <div id="quiz-results" class="mt-4" style="display: none;">
+                                <h4 class="dota-gold-text">Quiz Complete!</h4>
+                                <p>Your final score: <span id="final-score">0</span>/10</p>
+                                <p id="score-message"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Trivia Challenge Game -->
+            <div id="trivia-game" style="display: none;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="mb-4">
+                            <h4 class="dota-gold-text">Dota 2 Trivia Challenge</h4>
+                            <div id="trivia-question" class="trivia-question mb-3"></div>
+
+                            <div id="trivia-options" class="mb-4">
+                                <div class="row">
+                                    <div class="col-12 mb-2">
+                                        <button class="dota-btn w-100 trivia-option" data-index="0"></button>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <button class="dota-btn w-100 trivia-option" data-index="1"></button>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <button class="dota-btn w-100 trivia-option" data-index="2"></button>
+                                    </div>
+                                    <div class="col-12 mb-2">
+                                        <button class="dota-btn w-100 trivia-option" data-index="3"></button>
+                                    </div>
+                                </div>
+                            </div>
+                            <div id="trivia-feedback" class="alert" style="display: none;"></div>
+                            <div id="trivia-explanation" class="trivia-explanation" style="display: none;"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="score-panel">
+                            <h4 class="dota-gold-text">Score</h4>
+                            <div class="score-display">
+                                <span id="trivia-score">0</span>/<span id="trivia-total">10</span>
+                            </div>
+                            <div class="progress mt-3">
+                                <div id="trivia-progress" class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="timer-panel mt-3">
+                                <h4 class="dota-gold-text">Time</h4>
+                                <div class="timer-display" id="trivia-timer">20</div>
+                            </div>
+
+                            <div id="trivia-results" class="mt-4" style="display: none;">
+                                <h4 class="dota-gold-text">Trivia Complete!</h4>
+                                <p>Your final score: <span id="trivia-final-score">0</span>/10</p>
+                                <p id="trivia-score-message"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Item Guesser Game -->
+            <div id="item-guesser-game" style="display: none;">
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="item-display text-center mb-4">
+                            <h4 class="dota-gold-text mb-3">Guess the item from its description</h4>
+                            <div class="item-description-box">
+                                <p id="item-description" class="mb-3"></p>
+                                <p><strong>Cost: </strong><span id="item-cost" class="dota-gold-text"></span></p>
+                                <div id="item-components" class="item-components mt-2">
+                                    <p><strong>Components:</strong></p>
+                                    <div id="component-list" class="d-flex justify-content-center flex-wrap">
+                                        <!-- Component icons will be inserted here -->
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="item-options" class="mb-4">
+                            <div class="row">
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="item-option" data-index="0">
+                                        <img src="" alt="Item option" class="item-img">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="item-option" data-index="1">
+                                        <img src="" alt="Item option" class="item-img">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="item-option" data-index="2">
+                                        <img src="" alt="Item option" class="item-img">
+                                    </div>
+                                </div>
+                                <div class="col-md-3 col-6 mb-3">
+                                    <div class="item-option" data-index="3">
+                                        <img src="" alt="Item option" class="item-img">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="item-feedback" class="alert" style="display: none;"></div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="score-panel">
+                            <h4 class="dota-gold-text">Score</h4>
+                            <div class="score-display">
+                                <span id="item-score">0</span>/<span id="item-total">10</span>
+                            </div>
+                            <div class="progress mt-3">
+                                <div id="item-progress" class="progress-bar bg-danger" role="progressbar" style="width: 0%"></div>
+                            </div>
+                            <div class="timer-panel mt-3">
+                                <h4 class="dota-gold-text">Time</h4>
+                                <div class="timer-display" id="item-timer">15</div>
+                            </div>
+
+                            <div id="item-results" class="mt-4" style="display: none;">
+                                <h4 class="dota-gold-text">Challenge Complete!</h4>
+                                <p>Your final score: <span id="item-final-score">0</span>/10</p>
+                                <p id="item-score-message"></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="text-center mt-4">
+                <button id="game-restart" class="dota-btn mr-3">Restart</button>
+                <button id="game-exit" class="dota-btn">Exit Game</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/minigames.js"></script>
+}

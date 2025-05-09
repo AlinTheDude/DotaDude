@@ -1,0 +1,195 @@
+﻿@page
+@model DotaDude.Pages.CustomHeroesModel
+@{
+    ViewData["Title"] = "Custom Heroes Gallery";
+}
+
+<div class="custom-heroes-container">
+    <div class="custom-heroes-header">
+        <h1 class="dota-header">Community Hero Creations</h1>
+        <p class="dota-subtext">Explore heroes created by the DotaDude community</p>
+
+        @if (User.Identity.IsAuthenticated)
+        {
+            <a href="/CreateCustomHero" class="dota-button create-button">
+                <span class="button-inner">Create Your Own Hero</span>
+            </a>
+        }
+        else
+        {
+            <div class="login-prompt">
+                <p><a asp-page="/Login">Log in</a> to create your own custom hero!</p>
+            </div>
+        }
+    </div>
+
+    <div class="filter-controls">
+        <div class="search-box">
+            <input type="text" id="heroSearch" placeholder="Search heroes..." class="dota-input search-input">
+            <span class="search-icon"></span>
+        </div>
+
+        <div class="filter-dropdown">
+            <select id="attributeFilter" class="dota-select">
+                <option value="all">All Attributes</option>
+                <option value="str">Strength</option>
+                <option value="agi">Agility</option>
+                <option value="int">Intelligence</option>
+            </select>
+        </div>
+
+        <div class="filter-dropdown">
+            <select id="roleFilter" class="dota-select">
+                <option value="all">All Roles</option>
+                @foreach (var role in Model.AllRoles)
+                {
+                    <option value="@role.ToLower()">@role</option>
+                }
+            </select>
+        </div>
+    </div>
+
+    @if (!Model.CustomHeroes.Any())
+    {
+        <div class="no-heroes-message">
+            <p>No custom heroes have been created yet. Be the first to create one!</p>
+        </div>
+    }
+    else
+    {
+        <div class="heroes-grid">
+            @foreach (var hero in Model.CustomHeroes)
+            {
+                <div class="hero-card"
+                     data-name="@hero.Name.ToLower()"
+                     data-attribute="@hero.PrimaryAttribute"
+                     data-roles="@hero.Roles.ToLower()">
+                    <div class="hero-portrait @hero.PrimaryAttribute">
+                        @if (!string.IsNullOrEmpty(hero.ImagePath))
+                        {
+                            <img src="@hero.ImagePath" alt="@hero.Name">
+                        }
+                        else
+                        {
+                            <div class="placeholder-portrait">
+                                <span class="hero-initial">@hero.Name.Substring(0, 1)</span>
+                            </div>
+                        }
+                    </div>
+                    <div class="hero-info">
+                        <h3 class="hero-name">@hero.Name</h3>
+                        <div class="hero-meta">
+                            <span class="hero-attribute @hero.PrimaryAttribute">
+                                @switch (hero.PrimaryAttribute)
+                                {
+                                    case "str":
+                                        <text>Strength</text>
+                                        break;
+                                    case "agi":
+                                        <text>Agility</text>
+                                        break;
+                                    case "int":
+                                        <text>Intelligence</text>
+                                        break;
+                                }
+                            </span>
+                            <span class="hero-type">@hero.AttackType</span>
+                        </div>
+                        <div class="hero-roles">
+                            @foreach (var role in hero.Roles.Split(','))
+                            {
+                                <span class="role-tag">@role</span>
+                            }
+                        </div>
+                        <div class="hero-creator">
+                            <span>Created by: @hero.Creator.Username</span>
+                        </div>
+                        <a href="/CustomHeroDetails/@hero.Id" class="dota-button view-details">View Details</a>
+                    </div>
+                </div>
+            }
+        </div>
+    }
+
+    @if (User.Identity.IsAuthenticated)
+    {
+        <div class="my-heroes-section">
+            <h2 class="section-title">My Custom Heroes</h2>
+
+            @if (!Model.UserCustomHeroes.Any())
+            {
+                <div class="no-heroes-message">
+                    <p>You haven't created any heroes yet.</p>
+                </div>
+            }
+            else
+            {
+                <div class="my-heroes-list">
+                    @foreach (var hero in Model.UserCustomHeroes)
+                    {
+                        <div class="my-hero-card">
+                            <div class="hero-info">
+                                <h3 class="hero-name">@hero.Name</h3>
+                                <div class="hero-meta">
+                                    <span class="hero-attribute @hero.PrimaryAttribute"></span>
+                                    <span class="hero-created-date">Created: @hero.CreatedDate.ToString("MMM dd, yyyy")</span>
+                                </div>
+                                <div class="approval-status">
+                                    @if (hero.IsApproved)
+                                    {
+                                        <span class="status approved">Approved</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="status pending">Pending Approval</span>
+                                    }
+                                </div>
+                            </div>
+                            <div class="hero-actions">
+                                <a href="/CustomHeroDetails/@hero.Id" class="dota-button view-details">View</a>
+                                <a href="/EditCustomHero/@hero.Id" class="dota-button edit-button">Edit</a>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    }
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const searchInput = document.getElementById('heroSearch');
+            const attributeFilter = document.getElementById('attributeFilter');
+            const roleFilter = document.getElementById('roleFilter');
+            const heroCards = document.querySelectorAll('.hero-card');
+
+            function filterHeroes() {
+                const searchTerm = searchInput.value.toLowerCase();
+                const attributeValue = attributeFilter.value;
+                const roleValue = roleFilter.value;
+
+                heroCards.forEach(card => {
+                    const name = card.dataset.name;
+                    const attribute = card.dataset.attribute;
+                    const roles = card.dataset.roles;
+
+                    const matchesSearch = name.includes(searchTerm);
+                    const matchesAttribute = attributeValue === 'all' || attribute === attributeValue;
+                    const matchesRole = roleValue === 'all' || roles.includes(roleValue);
+
+                    if (matchesSearch && matchesAttribute && matchesRole) {
+                        card.style.display = 'flex';
+                    } else {
+                        card.style.display = 'none';
+                    }
+                });
+            }
+
+            searchInput.addEventListener('input', filterHeroes);
+            attributeFilter.addEventListener('change', filterHeroes);
+            roleFilter.addEventListener('change', filterHeroes);
+        });
+    </script>
+}

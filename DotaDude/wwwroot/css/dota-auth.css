@@ -1,0 +1,830 @@
+﻿:root {
+    --dota-gold: #ffd700;
+    --dota-gold-dark: #c87000;
+    --dota-gold-light: #ffea80;
+    --dota-red: #b91c1c;
+    --dota-bg-dark: #121212;
+    --dota-bg-panel: #1e1e1e;
+    --dota-border: #4b4b4b;
+    --dota-accent: #c87000;
+    --dota-text: #e4e4e4;
+    --dota-green: #00cc44;
+    --dota-orange: #ffaa00;
+}
+
+/* Sfondo e container principale */
+.auth-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    background-color: var(--dota-bg-dark);
+    background-image: url('/images/auth-bg.jpg'), radial-gradient(circle at center, #252525 0%, #121212 100%);
+    background-size: cover;
+    background-position: center;
+    background-blend-mode: overlay;
+    position: relative;
+    overflow: hidden;
+    padding: 20px;
+    font-family: 'Radiance', 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Particelle in stile Dota (embers) */
+.particles-container {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    pointer-events: none;
+    z-index: 0;
+}
+
+.auth-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: radial-gradient(circle at 20% 30%, rgba(255, 215, 0, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 70%, rgba(185, 28, 28, 0.05) 0%, transparent 50%);
+    z-index: 0;
+}
+
+/* Frame principale */
+.auth-frame {
+    background: var(--dota-bg-panel);
+    border: 2px solid var(--dota-border);
+    border-radius: 4px;
+    width: 100%;
+    max-width: 600px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7), 0 0 5px var(--dota-gold);
+    position: relative;
+    z-index: 1;
+    backdrop-filter: blur(5px);
+    overflow: hidden;
+    animation: frame-glow 3s infinite alternate;
+}
+
+/* Effetto bordo luminoso */
+@keyframes frame-glow {
+    0% {
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.7), 0 0 3px var(--dota-gold);
+    }
+
+    100% {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.7), 0 0 8px var(--dota-gold);
+    }
+}
+
+/* Header con stile Dota */
+.auth-frame-header {
+    background: linear-gradient(to bottom, #2a2a2a, #1a1a1a);
+    border-bottom: 2px solid var(--dota-border);
+    padding: 15px 20px;
+    text-align: center;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+    .auth-frame-header::after {
+        content: '';
+        position: absolute;
+        bottom: -2px;
+        left: 10%;
+        right: 10%;
+        height: 2px;
+        background: linear-gradient(90deg, transparent, var(--dota-gold), transparent);
+    }
+
+    .auth-frame-header h2 {
+        color: var(--dota-gold);
+        font-size: 28px;
+        font-weight: bold;
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        font-family: 'Trajan Pro', 'Times New Roman', serif;
+        text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+        position: relative;
+        z-index: 2;
+    }
+
+/* Decorazioni dell'header */
+.header-decoration {
+    position: absolute;
+    width: 60px;
+    height: 30px;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: center;
+    opacity: 0.7;
+}
+
+    .header-decoration.left {
+        left: 30px;
+        background-image: url('/images/dota-decor-left.png');
+    }
+
+    .header-decoration.right {
+        right: 30px;
+        background-image: url('/images/dota-decor-right.png');
+    }
+
+/* Logo */
+.auth-logo {
+    display: flex;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+    .auth-logo img {
+        max-width: 120px;
+        height: auto;
+        filter: drop-shadow(0 0 5px rgba(255, 215, 0, 0.5));
+    }
+
+/* Contenuto */
+.auth-frame-content {
+    padding: 30px;
+}
+
+/* Form e input */
+.auth-input-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+.auth-label {
+    display: block;
+    color: var(--dota-gold);
+    margin-bottom: 8px;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 14px;
+    letter-spacing: 0.5px;
+}
+
+.input-with-icon {
+    position: relative;
+    transition: all 0.3s;
+}
+
+    .input-with-icon.input-focused {
+        transform: translateY(-2px);
+    }
+
+.auth-input {
+    width: 100%;
+    padding: 12px 15px;
+    padding-right: 40px;
+    border: 1px solid var(--dota-border);
+    border-radius: 3px;
+    background-color: rgba(30, 30, 30, 0.8);
+    color: var(--dota-text);
+    font-size: 16px;
+    transition: all 0.3s ease;
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3);
+}
+
+    .auth-input:focus {
+        border-color: var(--dota-gold);
+        box-shadow: 0 0 0 2px rgba(255, 215, 0, 0.2), inset 0 1px 3px rgba(0, 0, 0, 0.3);
+        outline: none;
+    }
+
+/* Icona per gli input */
+.auth-input-icon {
+    position: absolute;
+    right: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--dota-border);
+    transition: all 0.3s;
+}
+
+.input-with-icon.input-focused .auth-input-icon {
+    color: var(--dota-gold);
+}
+
+/* Toggle password visibility */
+.toggle-password {
+    position: absolute;
+    right: 45px;
+    top: 50%;
+    transform: translateY(-50%);
+    background: none;
+    border: none;
+    color: var(--dota-border);
+    cursor: pointer;
+    padding: 0;
+    font-size: 14px;
+    transition: all 0.3s;
+}
+
+    .toggle-password:hover {
+        color: var(--dota-gold);
+    }
+
+/* Password helper text */
+.password-helper {
+    color: var(--dota-text);
+    margin-top: 5px;
+    display: block;
+    font-size: 12px;
+    opacity: 0.8;
+}
+
+/* Button in stile Dota */
+.auth-button {
+    background: linear-gradient(to bottom, var(--dota-gold), var(--dota-accent));
+    color: #111111;
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    width: 100%;
+    font-size: 16px;
+    transition: all 0.3s;
+    position: relative;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    margin-top: 20px;
+    overflow: hidden;
+    font-family: 'Radiance', 'Segoe UI', Tahoma, sans-serif;
+}
+
+    .auth-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(to bottom, rgba(255,255,255,0.1), transparent);
+        border-radius: 3px;
+    }
+
+    .auth-button:hover {
+        background: linear-gradient(to bottom, #ffdf4d, #e08000);
+        transform: translateY(-2px);
+        box-shadow: 0 6px 10px rgba(0, 0, 0, 0.4);
+    }
+
+    .auth-button:active {
+        transform: translateY(1px);
+        box-shadow: 0 2px 3px rgba(0, 0, 0, 0.4);
+    }
+
+/* Button glow effect */
+.button-glow {
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    animation: button-shine 3s infinite;
+    z-index: 0;
+}
+
+.auth-button-container {
+    position: relative;
+}
+
+    .auth-button-container .auth-button {
+        z-index: 1;
+    }
+
+/* Contenitore per i link di login e registrazione */
+.auth-links {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+    color: var(--dota-text);
+    font-size: 14px;
+}
+
+    .auth-links a {
+        color: var(--dota-gold);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .auth-links a:hover {
+            color: var(--dota-orange);
+        }
+
+/* Layout della form di login e registrazione */
+.auth-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+}
+
+/* Stile del footer */
+.auth-footer {
+    text-align: center;
+    margin-top: 20px;
+    color: var(--dota-text);
+    font-size: 12px;
+}
+
+    .auth-footer a {
+        color: var(--dota-gold);
+        text-decoration: none;
+        transition: color 0.3s ease;
+    }
+
+        .auth-footer a:hover {
+            color: var(--dota-orange);
+        }
+
+/* Modifiche al comportamento al passaggio del mouse per gli input */
+.auth-input:focus {
+    border-color: var(--dota-gold);
+    box-shadow: 0 0 5px rgba(255, 215, 0, 0.4), inset 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+
+    .auth-input:focus::placeholder {
+        color: rgba(255, 215, 0, 0.8);
+    }
+
+/* Placeholder */
+.auth-input::placeholder {
+    color: rgba(255, 215, 0, 0.5);
+    transition: color 0.3s ease;
+}
+
+/* Animazione dell'input quando selezionato */
+.auth-input-group input:focus {
+    transform: translateY(-3px);
+    transition: transform 0.2s ease;
+}
+
+/* Form di registrazione - link per la registrazione */
+.auth-register-link {
+    text-align: center;
+    font-size: 14px;
+    color: var(--dota-text);
+}
+
+    .auth-register-link a {
+        color: var(--dota-gold);
+        text-decoration: none;
+    }
+
+        .auth-register-link a:hover {
+            color: var(--dota-orange);
+        }
+
+/* Animazioni per l'elemento header */
+.auth-frame-header h2 {
+    animation: header-animate 1.5s ease-out forwards;
+}
+
+@keyframes header-animate {
+    0% {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Aggiunta del bordo e ombra al form */
+.auth-frame-content {
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+}
+
+/* Ridimensionamento responsive */
+@media (max-width: 768px) {
+    .auth-container {
+        padding: 10px;
+    }
+
+    .auth-frame {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    .auth-frame-header h2 {
+        font-size: 24px;
+    }
+
+    .auth-input {
+        padding: 10px;
+        font-size: 14px;
+    }
+
+    .auth-button {
+        padding: 10px 15px;
+        font-size: 14px;
+    }
+}
+
+.dota-auth-links {
+    display: flex; /* Allinea i pulsanti in linea */
+    align-items: center; /* Centra verticalmente i pulsanti */
+    justify-content: flex-end; /* Sposta i pulsanti verso il bordo destro */
+    position: relative; /* Posizionamento relativo alla navbar */
+    margin-left: auto; /* Spinge i pulsanti a destra */
+    height: 100%; /* Assicura che seguano l'altezza della navbar */
+    gap: 12px; /* Spaziatura uniforme tra i pulsanti */
+    padding-right: 20px; /* Spaziatura dal bordo destro */
+}
+
+/* Stile di base per i pulsanti */
+.auth-button {
+    font-family: 'Trajan Pro', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: 2px solid var(--dota-highlight); /* Bordi dorati */
+    border-radius: 5px; /* Angoli arrotondati */
+    color: var(--dota-text); /* Colore del testo */
+    background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary)); /* Sfondo scuro */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Ombra */
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    /* Hover per i pulsanti */
+    .auth-button:hover {
+        background: var(--dota-highlight); /* Sfondo dorato */
+        color: #000; /* Testo nero */
+        box-shadow: 0 6px 12px rgba(255, 215, 0, 0.5); /* Ombra più intensa */
+        transform: translateY(-2px); /* Effetto sollevato */
+    }
+
+    /* Pulsante Login */
+    .auth-button.login-button {
+        background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary)); /* Sfondo di base */
+    }
+
+        .auth-button.login-button:hover {
+            background: linear-gradient(45deg, #ffd700, #ffcc00); /* Sfondo dorato in hover */
+        }
+
+    /* Pulsante Register */
+    .auth-button.register-button {
+        background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary)); /* Sfondo di base */
+    }
+
+        .auth-button.register-button:hover {
+            background: linear-gradient(45deg, #ff4c4c, #ff6666); /* Sfondo rosso in hover */
+        }
+
+/* Responsive per schermi piccoli */
+@media (max-width: 768px) {
+    .dota-auth-links {
+        flex-direction: column; /* Disposizione verticale */
+        align-items: flex-end; /* Allinea i pulsanti a destra */
+        gap: 8px; /* Riduci la spaziatura */
+        padding-right: 10px; /* Riduci la distanza dal bordo destro */
+    }
+
+    .auth-button {
+        padding: 6px 10px; /* Riduci il padding */
+        font-size: 12px; /* Riduci la dimensione del testo */
+    }
+}
+
+.steam-icon img {
+    width: 30px; /* Imposta la larghezza dell'immagine */
+    height: auto; /* Mantieni le proporzioni dell'immagine */
+}
+
+.dota-logo img {
+    width: 40px; /* Imposta la larghezza dell'immagine */
+    height: auto; /* Mantieni le proporzioni */
+}
+
+.steam-login {
+    text-align: center; /* Centra il contenuto */
+    margin-top: 20px; /* Distanza dall'alto */
+}
+
+.steam-login-title {
+    font-size: 18px;
+    color: #fff; /* Colore bianco per il titolo */
+    margin-bottom: 15px;
+}
+
+.steam-button {
+    display: inline-flex; /* Usa flexbox per allineare l'icona e il testo */
+    align-items: center; /* Centra verticalmente il contenuto */
+    justify-content: center; /* Centra orizzontalmente il contenuto */
+    background: linear-gradient(45deg, #1b2838, #171a21); /* Gradiente Steam */
+    color: #fff; /* Colore del testo bianco */
+    font-size: 18px; /* Dimensione del testo */
+    padding: 10px 20px; /* Spaziatura interna */
+    border: none; /* Rimuove il bordo */
+    border-radius: 50px; /* Bordo arrotondato per effetto "aero" */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5); /* Ombra per l'effetto sollevato */
+    cursor: pointer; /* Cambia il cursore quando ci si passa sopra */
+    transition: background 0.3s ease; /* Transizione per il cambio colore */
+    text-decoration: none; /* Rimuove il sottolineato dal link */
+}
+
+    .steam-button:hover {
+        background: linear-gradient(45deg, #2a3d4f, #1e2429); /* Hover più chiaro */
+    }
+
+.steam-icon {
+    width: 30px; /* Imposta la dimensione dell'icona */
+    height: auto; /* Mantieni le proporzioni */
+    margin-right: 10px; /* Spazio tra l'icona e il testo */
+}
+
+.steam-button span {
+    font-size: 16px; /* Dimensione del testo accanto all'icona */
+}
+
+.dota-logo{
+    align-content: center;
+}
+
+.dota-auth-links {
+    display: flex; /* Allinea i pulsanti in linea */
+    align-items: center; /* Centra verticalmente i pulsanti */
+    gap: 15px; /* Spaziatura tra i pulsanti */
+    margin-left: auto; /* Sposta i pulsanti sulla destra */
+}
+
+/* Stile base per i pulsanti Auth */
+.auth-button {
+    font-family: 'Trajan Pro', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 10px 15px;
+    border: 2px solid var(--dota-highlight);
+    border-radius: 5px;
+    color: var(--dota-text);
+    background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    transition: all 0.3s ease;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+    /* Effetti Hover per i pulsanti */
+    .auth-button:hover {
+        background: var(--dota-highlight);
+        color: #000;
+        box-shadow: 0 6px 12px rgba(255, 215, 0, 0.5);
+        transform: translateY(-2px);
+    }
+
+    /* Pulsante Login */
+    .auth-button.login-button {
+        background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary));
+    }
+
+        .auth-button.login-button:hover {
+            background: linear-gradient(45deg, #ffd700, #ffcc00);
+        }
+
+    /* Pulsante Register */
+    .auth-button.register-button {
+        background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary));
+    }
+
+        .auth-button.register-button:hover {
+            background: linear-gradient(45deg, #ff4c4c, #ff6666);
+        }
+
+    /* Pulsante Logout */
+    .auth-button.logout-button {
+        background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary));
+    }
+
+        .auth-button.logout-button:hover {
+            background: linear-gradient(45deg, #00cc44, #00ff66);
+        }
+
+.dota-navbar-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+}
+
+.dota-navbar-menu {
+    display: flex;
+    align-items: center;
+    flex-grow: 1; /* Il menu principale occupa lo spazio disponibile */
+    margin-left: 20px;
+}
+
+.dota-menu-list {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 0;
+    list-style-type: none;
+}
+
+.dota-auth-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto; /* Spinge i bottoni all'estrema destra */
+    padding-right: 0; /* Rimuovi qualsiasi padding che potrebbe distanziarli dal bordo */
+}
+
+/* Se c'è un container che avvolge la navbar e aggiunge ulteriore padding */
+.container {
+    padding-right: 0; /* Riduci il padding destro del container */
+}
+
+/* Per schermi molto piccoli, mantieni i bottoni visibili e allineati a destra */
+@media (max-width: 992px) {
+    .dota-auth-links {
+        margin-left: auto; /* Mantiene i bottoni a destra anche in mobile */
+    }
+}
+
+/* Stile per schermi più piccoli */
+@media (max-width: 992px) {
+    .dota-navbar-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        background: var(--dota-primary);
+        z-index: 1000;
+        display: none;
+        padding: 15px 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+    }
+
+        .dota-navbar-menu.show {
+            display: flex;
+        }
+
+    .dota-menu-list {
+        flex-direction: column;
+        width: 100%;
+    }
+
+    .menu-item {
+        width: 100%;
+        padding: 10px 20px;
+    }
+
+    .dota-auth-links {
+        width: 100%;
+        margin-left: 0;
+        padding: 15px 20px 0;
+        justify-content: flex-start;
+        border-top: 1px solid rgba(255, 215, 0, 0.2);
+        margin-top: 10px;
+    }
+}
+.dota-auth-links {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: 20px;
+    z-index: 5;
+}
+
+.auth-button {
+    font-family: 'Trajan Pro', serif;
+    font-size: 14px;
+    text-transform: uppercase;
+    font-weight: bold;
+    padding: 8px 15px;
+    border: 2px solid var(--dota-highlight);
+    border-radius: 5px;
+    color: var(--dota-text);
+    background: linear-gradient(45deg, var(--dota-secondary), var(--dota-primary));
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+    text-decoration: none;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+    .auth-button:hover {
+        background: var(--dota-highlight);
+        color: #000;
+        box-shadow: 0 6px 12px rgba(255, 215, 0, 0.5);
+        transform: translateY(-2px);
+    }
+
+    .auth-button.login-button:hover {
+        background: linear-gradient(45deg, #ffd700, #ffcc00);
+    }
+
+    .auth-button.register-button:hover {
+        background: linear-gradient(45deg, #ff4c4c, #ff6666);
+    }
+
+/* Toggle per menu mobile */
+.dota-navbar-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 30px;
+    height: 22px;
+    cursor: pointer;
+    z-index: 100;
+}
+
+.toggle-bar {
+    width: 100%;
+    height: 3px;
+    background-color: var(--dota-highlight);
+    border-radius: 3px;
+    transition: all 0.3s ease;
+}
+
+/* Responsive per dispositivi mobili */
+@media (max-width: 992px) {
+    .dota-navbar-toggle {
+        display: flex;
+    }
+
+    .dota-navbar-menu {
+        position: absolute;
+        top: 100%;
+        left: 0;
+        width: 100%;
+        flex-direction: column;
+        align-items: flex-start;
+        background: var(--dota-primary);
+        z-index: 1000;
+        display: none;
+        padding: 15px 0;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+        margin-left: 0;
+    }
+
+        .dota-navbar-menu.show {
+            display: flex;
+        }
+
+    .dota-menu-list {
+        flex-direction: column;
+        width: 100%;
+        gap: 0;
+    }
+
+    .menu-item {
+        width: 100%;
+        padding: 10px 20px;
+    }
+
+    .menu-link {
+        display: block;
+        width: 100%;
+    }
+
+    .menu-highlight {
+        display: none;
+    }
+
+    /* Mantenere i bottoni auth in alto a destra */
+    .dota-auth-links {
+        margin-left: 0;
+    }
+}
+
+/* Responsive per schermi molto piccoli */
+@media (max-width: 576px) {
+    .brand-name {
+        font-size: 20px;
+    }
+
+    .brand-logo {
+        height: 32px;
+    }
+
+    .auth-button {
+        padding: 6px 10px;
+        font-size: 12px;
+    }
+}
+
+}
+
+
+
+

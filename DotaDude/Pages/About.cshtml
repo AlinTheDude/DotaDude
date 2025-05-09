@@ -1,0 +1,59 @@
+﻿@page
+@model AboutModel
+@{
+    ViewData["Title"] = "About DotaDude";
+}
+
+<div class="dota-card">
+    <div class="dota-card-header">
+        <h1>About DotaDude</h1>
+    </div>
+    <div class="dota-card-body">
+        <div class="row">
+            <div class="col-md-8">
+                <h2 class="dota-gold-text">Our Mission</h2>
+                <p>
+                    DotaDude was created as a school project with a passion for Dota 2. Our goal is to provide a comprehensive resource for Dota 2 players
+                    and enthusiasts, offering detailed hero information, match statistics, and fun mini-games to test your knowledge.
+                </p>
+
+                <h2 class="dota-gold-text mt-4">Technologies Used</h2>
+                <p>
+                    This web application was built using ASP.NET Core Razor Pages and C#. We utilize the OpenDota API to fetch real-time data about heroes,
+                    matches, and other game statistics. The front-end is designed with Bootstrap and custom CSS to replicate the authentic Dota 2 aesthetic.
+                </p>
+
+                <h2 class="dota-gold-text mt-4">Disclaimer</h2>
+                <p>
+                    DotaDude is a fan project and is not affiliated with Valve Corporation. Dota 2 and all related assets are the property of Valve Corporation.
+                    This application is for educational purposes only.
+                </p>
+
+                <h2 class="dota-gold-text mt-4">Contact</h2>
+                <p>
+                    Have suggestions, feedback, or found a bug? Feel free to contact us:
+                </p>
+                <ul>
+                    <li>Email: <a href="mailto:contact@dotadude.com" class="dota-gold-text">contact@dotadude.com</a></li>
+                    <li>GitHub: <a href="https://github.com/yourusername/dotadude" target="_blank" class="dota-gold-text">github.com/yourusername/dotadude</a></li>
+                </ul>
+            </div>
+            <div class="col-md-4">
+                <img src="~/images/dota-artwork.jpg" class="img-fluid rounded mb-4" alt="Dota 2 Artwork">
+
+                <div class="dota-card">
+                    <div class="dota-card-header">
+                        <h4>Data Sources</h4>
+                    </div>
+                    <div class="dota-card-body">
+                        <ul class="list-unstyled">
+                            <li><a href="https://www.opendota.com/" target="_blank" class="dota-gold-text">OpenDota API</a></li>
+                            <li><a href="https://www.dota2.com/" target="_blank" class="dota-gold-text">Dota 2 Official Website</a></li>
+                            <li><a href="https://liquipedia.net/dota2/" target="_blank" class="dota-gold-text">Liquipedia Dota 2 Wiki</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

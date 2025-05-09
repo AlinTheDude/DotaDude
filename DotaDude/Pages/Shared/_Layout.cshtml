@@ -1,0 +1,598 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DotaDude</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" />
+    <link rel="stylesheet" href="~/css/dota-theme.css" />
+    <link rel="stylesheet" href="~/css/dota-auth.css" />
+    <link rel="stylesheet" href="~/css/dashboard.css" />
+    <link rel="stylesheet" href="~/css/admin.css" />
+    <link rel="stylesheet" href="~/css/custom-hero-styles.css" />
+
+
+    <link rel="icon" type="image/x-icon" href="/images/dotaicon.ico">
+
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Elementi decorativi di sfondo -->
+    <div class="particles-container" id="particles"></div>
+    <div class="dota-logo-bg"></div>
+    <div class="dota-bg-decoration" id="bgDecorations"></div>
+
+    <header>
+        <div class="dota-navbar">
+            <div class="dota-fire-particles" id="navbarParticles"></div>
+            <div class="container">
+                <div class="dota-navbar-inner">
+                    <!-- Logo e nome -->
+                    <div class="dota-navbar-brand">
+                        <a href="~/" class="brand-link">
+                            <img src="~/images/dota-logo.png" alt="DotaDude Logo" class="brand-logo">
+                            <span class="brand-name">DotaDude</span>
+                        </a>
+                    </div>
+
+                    <!-- Menu principale -->
+                    <div class="dota-navbar-menu" id="navMenu">
+                        <div class="menu-highlight"></div>
+                        <ul class="dota-menu-list">
+                            <li class="menu-item" data-page="index">
+                                <a asp-page="/Index" class="menu-link">
+                                    <span class="menu-text">Home</span>
+                                </a>
+                            </li>
+                            <li class="menu-item" data-page="heroes">
+                                <a asp-page="/Heroes" class="menu-link">
+                                    <span class="menu-text">Heroes</span>
+                                </a>
+                            </li>
+                            <li class="menu-item" data-page="minigames">
+                                <a asp-page="/Minigames" class="menu-link">
+                                    <span class="menu-text">Mini-Games</span>
+                                </a>
+                            </li>
+                            <li class="menu-item" data-page="createcustomhero">
+                                <a asp-page="/CreateCustomHero" class="menu-link">
+                                    <span class="menu-text">Creazione</span>
+                                </a>
+                            </li>
+                            <li class="menu-item" data-page="about">
+                                <a asp-page="/About" class="menu-link">
+                                    <span class="menu-text">About</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Pulsante menu mobile -->
+                    <div class="dota-navbar-toggle" id="navToggle">
+                        <div class="toggle-bar"></div>
+                        <div class="toggle-bar"></div>
+                        <div class="toggle-bar"></div>
+                    </div>
+
+                    <!-- Auth links spostati fuori dal menu principale -->
+                    <div class="dota-auth-links">
+                        @if (User.Identity != null && User.Identity.IsAuthenticated)
+                        {
+                            <form method="post" asp-page="/Logout" class="d-inline">
+                                <button type="submit" class="auth-button logout-button">
+                                    Logout
+                                </button>
+                            </form>
+                        }
+                        else
+                        {
+                            <a asp-page="/Login" class="auth-button login-button">
+                                Login
+                            </a>
+                            <a asp-page="/Register" class="auth-button register-button">
+                                Register
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container page-transition">
+        <main role="main" class="pb-3">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="border-top footer text-muted">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-6">
+                    <p class="dota-gold-text">&copy; 2025 - DotaDude - A Dota 2 Fan Project</p>
+                </div>
+                <div class="col-md-6 text-right">
+                    <p>Powered by <span class="dota-gold-text">OpenDota API</span></p>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <a href="#" class="back-to-top" id="backToTop">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Gestione toggle menu mobile
+            const navToggle = document.getElementById('navToggle');
+            const navMenu = document.getElementById('navMenu');
+
+            if (navToggle && navMenu) {
+                navToggle.addEventListener('click', function () {
+                    navToggle.classList.toggle('active');
+                    navMenu.classList.toggle('show');
+                });
+            }
+
+            // Gestione evidenziazione menu
+            const menuItems = document.querySelectorAll('.menu-item');
+            const menuHighlight = document.querySelector('.menu-highlight');
+
+            // Imposta la classe active sul menu corrente
+            const currentPath = window.location.pathname.toLowerCase();
+
+            let activeItem = null;
+
+            menuItems.forEach(item => {
+                const link = item.querySelector('.menu-link');
+                const href = link.getAttribute('href').toLowerCase();
+
+                if (currentPath === href ||
+                    (currentPath.includes(item.dataset.page) && item.dataset.page !== 'index') ||
+                    (currentPath === '/' && item.dataset.page === 'index')) {
+                    item.classList.add('active');
+                    activeItem = item;
+                }
+
+                // Hover effect per la barra di evidenziazione
+                if (window.innerWidth > 992) {
+                    item.addEventListener('mouseenter', function () {
+                        if (menuHighlight) {
+                            const itemRect = item.getBoundingClientRect();
+                            const menuRect = navMenu.getBoundingClientRect();
+
+                            menuHighlight.style.width = itemRect.width + 'px';
+                            menuHighlight.style.left = (itemRect.left - menuRect.left) + 'px';
+                            menuHighlight.style.opacity = '1';
+                        }
+                    });
+
+                    item.addEventListener('mouseleave', function () {
+                        if (menuHighlight && activeItem) {
+                            const activeRect = activeItem.getBoundingClientRect();
+                            const menuRect = navMenu.getBoundingClientRect();
+
+                            menuHighlight.style.width = activeRect.width + 'px';
+                            menuHighlight.style.left = (activeRect.left - menuRect.left) + 'px';
+                        } else if (menuHighlight) {
+                            menuHighlight.style.opacity = '0';
+                        }
+                    });
+                }
+            });
+
+            // Posiziona inizialmente l'evidenziazione sul menu attivo
+            if (activeItem && menuHighlight && window.innerWidth > 992) {
+                setTimeout(function () {
+                    const activeRect = activeItem.getBoundingClientRect();
+                    const menuRect = navMenu.getBoundingClientRect();
+
+                    menuHighlight.style.width = activeRect.width + 'px';
+                    menuHighlight.style.left = (activeRect.left - menuRect.left) + 'px';
+                    menuHighlight.style.opacity = '1';
+                }, 100);
+            }
+
+            // Gestisci la chiusura del menu quando si fa clic su un link (in modalità mobile)
+            menuItems.forEach(item => {
+                const link = item.querySelector('.menu-link');
+                link.addEventListener('click', function () {
+                    if (window.innerWidth <= 992) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('show');
+                    }
+                });
+            });
+
+            // Gestisci il ridimensionamento della finestra
+            window.addEventListener('resize', function () {
+                if (window.innerWidth > 992) {
+                    // Ricalcola la posizione dell'evidenziazione
+                    if (activeItem && menuHighlight) {
+                        const activeRect = activeItem.getBoundingClientRect();
+                        const menuRect = navMenu.getBoundingClientRect();
+
+                        menuHighlight.style.width = activeRect.width + 'px';
+                        menuHighlight.style.left = (activeRect.left - menuRect.left) + 'px';
+                        menuHighlight.style.opacity = '1';
+                    }
+                } else {
+                    // Nascondi l'evidenziazione su mobile
+                    if (menuHighlight) {
+                        menuHighlight.style.opacity = '0';
+                    }
+
+                    // Chiudi il menu su mobile quando si ridimensiona
+                    if (navMenu.classList.contains('show')) {
+                        navToggle.classList.remove('active');
+                        navMenu.classList.remove('show');
+                    }
+                }
+            });
+
+            // Helper function per valori casuali
+            function randomRange(min, max) {
+                return Math.random() * (max - min) + min;
+            }
+
+            // Sistema di particelle avanzato in stile Dota 2 per la navbar
+            const navbarParticlesContainer = document.getElementById('navbarParticles');
+            if (navbarParticlesContainer) {
+                // Configurazione
+                const navConfig = {
+                    fireParticles: {
+                        count: 15,
+                        minSize: 10,
+                        maxSize: 30,
+                        minDuration: 1.5,
+                        maxDuration: 3
+                    },
+                    emberParticles: {
+                        count: 30,
+                        minDuration: 1,
+                        maxDuration: 2.5
+                    },
+                    smokeParticles: {
+                        count: 10,
+                        minSize: 30,
+                        maxSize: 60,
+                        minDuration: 2,
+                        maxDuration: 4
+                    }
+                };
+
+                // Funzione per generare una particella di fuoco
+                function createFireParticle() {
+                    const particle = document.createElement('div');
+                    particle.className = 'fire-particle';
+
+                    // Proprietà casuali
+                    const size = randomRange(navConfig.fireParticles.minSize, navConfig.fireParticles.maxSize);
+                    const left = randomRange(0, 100);
+                    const duration = randomRange(navConfig.fireParticles.minDuration, navConfig.fireParticles.maxDuration);
+                    const delay = randomRange(0, 2);
+
+                    // Imposta lo stile della particella
+                    particle.style.width = size + 'px';
+                    particle.style.height = size * 1.5 + 'px';
+                    particle.style.left = left + '%';
+                    particle.style.opacity = randomRange(0.5, 0.8);
+
+                    // Imposta l'animazione
+                    particle.style.animation = `rise ${duration}s ease-out ${delay}s infinite`;
+
+                    // Aggiungi la particella al container
+                    navbarParticlesContainer.appendChild(particle);
+                }
+
+                // Funzione per generare una particella di brace
+                function createEmberParticle() {
+                    const particle = document.createElement('div');
+                    particle.className = 'ember-particle';
+
+                    // Proprietà casuali
+                    const left = randomRange(0, 100);
+                    const duration = randomRange(navConfig.emberParticles.minDuration, navConfig.emberParticles.maxDuration);
+                    const delay = randomRange(0, 3);
+                    const random = Math.random();
+
+                    // Imposta lo stile della particella
+                    particle.style.left = left + '%';
+                    particle.style.setProperty('--random', random);
+
+                    // Imposta l'animazione
+                    particle.style.animation = `ember-rise ${duration}s ease-out ${delay}s infinite`;
+
+                    // Aggiungi la particella al container
+                    navbarParticlesContainer.appendChild(particle);
+                }
+
+                // Funzione per generare una particella di fumo
+                function createSmokeParticle() {
+                    const particle = document.createElement('div');
+                    particle.className = 'smoke-particle';
+                    const size = randomRange(navConfig.smokeParticles.minSize, navConfig.smokeParticles.maxSize);
+                    const left = randomRange(0, 100);
+                    const duration = randomRange(navConfig.smokeParticles.minDuration, navConfig.smokeParticles.maxDuration);
+                    const delay = randomRange(0, 2);
+
+                    // Imposta lo stile della particella
+                    particle.style.width = size + 'px';
+                    particle.style.height = size + 'px';
+                    particle.style.left = left + '%';
+                    particle.style.opacity = randomRange(0.1, 0.3);
+
+                    // Imposta l'animazione
+                    particle.style.animation = `smoke-rise ${duration}s ease-out ${delay}s infinite`;
+
+                    // Aggiungi la particella al container
+                    navbarParticlesContainer.appendChild(particle);
+                }
+
+                // Crea le particelle iniziali
+                for (let i = 0; i < navConfig.fireParticles.count; i++) {
+                    createFireParticle();
+                }
+
+                for (let i = 0; i < navConfig.emberParticles.count; i++) {
+                    createEmberParticle();
+                }
+
+                for (let i = 0; i < navConfig.smokeParticles.count; i++) {
+                    createSmokeParticle();
+                }
+
+                // Ciclo di aggiornamento delle particelle
+                setInterval(function () {
+                    // Rimuovi alcune particelle vecchie e aggiungine di nuove per mantenere l'effetto fresco
+                    if (Math.random() > 0.7) {
+                        const oldParticle = navbarParticlesContainer.querySelector('.fire-particle');
+                        if (oldParticle) {
+                            oldParticle.remove();
+                            createFireParticle();
+                        }
+                    }
+
+                    if (Math.random() > 0.5) {
+                        const oldParticle = navbarParticlesContainer.querySelector('.ember-particle');
+                        if (oldParticle) {
+                            oldParticle.remove();
+                            createEmberParticle();
+                        }
+                    }
+
+                    if (Math.random() > 0.8) {
+                        const oldParticle = navbarParticlesContainer.querySelector('.smoke-particle');
+                        if (oldParticle) {
+                            oldParticle.remove();
+                            createSmokeParticle();
+                        }
+                    }
+                }, 2000);
+            }
+
+            // Sistema di particelle Ember per tutta la pagina
+            function createPageEmberSystem() {
+                const particlesContainer = document.getElementById('particles');
+                if (!particlesContainer) return;
+
+                // Configurazione per le particelle della pagina
+                const pageConfig = {
+                    emberParticles: {
+                        count: 60, // Più particelle per un effetto a pagina intera
+                        minSize: 1,
+                        maxSize: 4,
+                        minDuration: 3,
+                        maxDuration: 8,
+                        minDelay: 0,
+                        maxDelay: 5
+                    }
+                };
+
+                // Funzione per creare una singola particella ember
+                function createPageEmber() {
+                    const ember = document.createElement('div');
+                    ember.className = 'page-ember';
+
+                    // Proprietà casuali
+                    const size = randomRange(pageConfig.emberParticles.minSize, pageConfig.emberParticles.maxSize);
+                    const posX = randomRange(0, 100);
+                    const posY = randomRange(10, 100);
+                    const duration = randomRange(pageConfig.emberParticles.minDuration, pageConfig.emberParticles.maxDuration);
+                    const delay = randomRange(pageConfig.emberParticles.minDelay, pageConfig.emberParticles.maxDelay);
+                    const randomDirection = Math.random() * 2 - 1; // Valore casuale tra -1 e 1
+
+                    // Imposta lo stile della particella
+                    ember.style.width = size + 'px';
+                    ember.style.height = size + 'px';
+                    ember.style.left = posX + 'vw';
+                    ember.style.bottom = posY + 'vh';
+                    ember.style.opacity = randomRange(0.3, 0.8);
+                    ember.style.setProperty('--random-dir', randomDirection);
+
+                    // Imposta l'animazione
+                    ember.style.animation = `page-ember-float ${duration}s ease-out ${delay}s infinite`;
+
+                    // Aggiungi al container
+                    particlesContainer.appendChild(ember);
+                }
+
+                // Crea le particelle iniziali
+                for (let i = 0; i < pageConfig.emberParticles.count; i++) {
+                    createPageEmber();
+                }
+
+                // Aggiorna continuamente le particelle
+                setInterval(function () {
+                    if (Math.random() > 0.7) {
+                        const oldEmber = particlesContainer.querySelector('.page-ember');
+                        if (oldEmber && particlesContainer.children.length > pageConfig.emberParticles.count) {
+                            oldEmber.remove();
+                        }
+                        createPageEmber();
+                    }
+                }, 500);
+            }
+
+            // Inizializza le particelle della pagina
+            createPageEmberSystem();
+
+            // Inizializza le decorazioni di sfondo
+            initBackgroundDecorations();
+
+            // Funzione per creare ulteriori decorazioni di sfondo in stile Dota
+            function initBackgroundDecorations() {
+                const decorContainer = document.getElementById('bgDecorations');
+                if (!decorContainer) return;
+
+                // Crea sottili linee geometriche in stile Dota
+                for (let i = 0; i < 5; i++) {
+                    const line = document.createElement('div');
+                    line.className = 'dota-bg-line';
+
+                    const posY = 20 + (i * 15);
+                    const width = 40 + (i * 10);
+                    const opacity = 0.1 - (i * 0.015);
+
+                    line.style.top = posY + 'vh';
+                    line.style.width = width + 'vw';
+                    line.style.opacity = opacity;
+                    line.style.animationDelay = (i * 0.5) + 's';
+
+                    decorContainer.appendChild(line);
+                }
+            }
+
+            // Effetto pulsante back-to-top
+            const backToTopButton = document.getElementById('backToTop');
+            if (backToTopButton) {
+                window.addEventListener('scroll', function () {
+                    if (window.pageYOffset > 300) {
+                        backToTopButton.classList.add('visible');
+                    } else {
+                        backToTopButton.classList.remove('visible');
+                    }
+                });
+
+                backToTopButton.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                });
+            }
+            // Sistema di particelle Ember per tutta la pagina
+            function createPageEmberSystem() {
+                console.log("Inizializzazione sistema particelle pagina");
+                const particlesContainer = document.getElementById('particles');
+
+                if (!particlesContainer) {
+                    console.error("Container particelle non trovato! Creazione automatica...");
+                    // Se il container non esiste, lo creiamo
+                    const newContainer = document.createElement('div');
+                    newContainer.id = 'particles';
+                    newContainer.className = 'particles-container';
+                    document.body.appendChild(newContainer);
+                    particlesContainer = newContainer;
+                }
+
+                // Pulisci qualsiasi particella esistente
+                particlesContainer.innerHTML = '';
+
+                // Configurazione per le particelle della pagina
+                const pageConfig = {
+                    emberParticles: {
+                        count: 80, // Aumentato il numero di particelle
+                        minSize: 2,
+                        maxSize: 5,
+                        minDuration: 3,
+                        maxDuration: 8,
+                        minDelay: 0,
+                        maxDelay: 3
+                    }
+                };
+
+                console.log(`Creazione di ${pageConfig.emberParticles.count} particelle ember`);
+
+                // Funzione per creare una singola particella ember
+                function createPageEmber() {
+                    const ember = document.createElement('div');
+                    ember.className = 'page-ember';
+
+                    // Proprietà casuali
+                    const size = randomRange(pageConfig.emberParticles.minSize, pageConfig.emberParticles.maxSize);
+                    const posX = randomRange(0, 100);
+                    const posY = randomRange(0, 50); // Concentra le particelle nella parte inferiore
+                    const duration = randomRange(pageConfig.emberParticles.minDuration, pageConfig.emberParticles.maxDuration);
+                    const delay = randomRange(pageConfig.emberParticles.minDelay, pageConfig.emberParticles.maxDelay);
+                    const randomDirection = Math.random() * 2 - 1; // Valore casuale tra -1 e 1
+
+                    // Imposta lo stile della particella
+                    ember.style.width = size + 'px';
+                    ember.style.height = size + 'px';
+                    ember.style.left = posX + 'vw';
+                    ember.style.bottom = posY + 'vh';
+                    ember.style.setProperty('--random-dir', randomDirection);
+
+                    // Imposta l'animazione
+                    ember.style.animation = `page-ember-float ${duration}s ease-out ${delay}s infinite`;
+
+                    // Debug visibile
+                    if (Math.random() > 0.9) {
+                        ember.style.width = '8px';
+                        ember.style.height = '8px';
+                        ember.style.backgroundColor = '#ffff00'; // Alcune particelle gialle per il debug
+                    }
+
+                    // Aggiungi al container
+                    particlesContainer.appendChild(ember);
+                    return ember;
+                }
+
+                // Crea le particelle iniziali
+                for (let i = 0; i < pageConfig.emberParticles.count; i++) {
+                    const particle = createPageEmber();
+                }
+
+                // Aggiorna continuamente le particelle
+                setInterval(function () {
+                    if (particlesContainer.children.length < pageConfig.emberParticles.count || Math.random() > 0.7) {
+                        createPageEmber();
+
+                        // Rimuovi alcune particelle vecchie se ce ne sono troppe
+                        if (particlesContainer.children.length > pageConfig.emberParticles.count * 1.2) {
+                            const oldEmber = particlesContainer.querySelector('.page-ember');
+                            if (oldEmber) {
+                                oldEmber.remove();
+                            }
+                        }
+                    }
+                }, 300);
+
+                console.log("Sistema particelle pagina inizializzato");
+
+                // Crea un indicatore visivo per debugging
+                const debugIndicator = document.createElement('div');
+                debugIndicator.style.position = 'fixed';
+                debugIndicator.style.bottom = '10px';
+                debugIndicator.style.right = '10px';
+                debugIndicator.style.width = '10px';
+                debugIndicator.style.height = '10px';
+                debugIndicator.style.backgroundColor = 'green';
+                debugIndicator.style.borderRadius = '50%';
+                debugIndicator.style.zIndex = '9999';
+                debugIndicator.style.opacity = '0.7';
+                debugIndicator.title = 'Particelle attive';
+                document.body.appendChild(debugIndicator);
+            }
+        });
+    </script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

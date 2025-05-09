@@ -1,0 +1,42 @@
+﻿@page
+@model DotaDude.Pages.ErrorModel
+@{
+    ViewData["Title"] = "Error";
+}    
+
+<div class="dota-container">
+    <div class="dota-frame auth-fade-in">
+        <div class="dota-frame-header">
+            <div class="header-decoration left"></div>
+            <h2>ERRORE</h2>
+            <div class="header-decoration right"></div>
+        </div>
+        <div class="dota-frame-content">
+            <div class="text-center">
+                <img src="/images/icons/error.png" alt="Errore" class="error-icon" />
+                <h3 class="mt-4 dota-gold-text">Si è verificato un errore!</h3>
+                <p class="mt-3">@Model.ErrorMessage</p>
+                <div class="mt-4">
+                    <a href="javascript:history.back()" class="dota-button dota-button-secondary mr-3">
+                        <span>Indietro</span>
+                    </a>
+                    <a asp-page="/Index" class="dota-button">
+                        <span>Vai alla Home</span>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            if (window.audioEnabled) {
+                const errorSound = new Audio('/sounds/error.mp3');
+                errorSound.volume = 0.3;
+                errorSound.play();
+            }
+        });
+    </script>
+}

@@ -1,0 +1,70 @@
+﻿@page
+@model DotaDude.Pages.AdminLoginModel
+@{
+    ViewData["Title"] = "Admin Login";
+}
+
+<div class="auth-container">
+    <div class="particles-container">
+        @for (var i = 0; i < 25; i++)
+        {
+            var size = new Random().Next(3, 8);
+            var posX = new Random().Next(5, 95);
+            var posY = new Random().Next(5, 95);
+            var duration = new Random().Next(5, 15);
+            var delay = new Random().Next(0, 7);
+            <div class="auth-ember" style="width: @(size)px; height: @(size)px; left: @(posX)%; bottom: @(posY)%; animation: float-up @(duration)s ease-out @(delay)s infinite;"></div>
+        }
+    </div>
+
+    <div class="auth-frame auth-fade-in">
+        <div class="auth-frame-header">
+            <div class="header-decoration left"></div>
+            <h2>ACCESSO ADMIN</h2>
+            <div class="header-decoration right"></div>
+        </div>
+        <div class="auth-frame-content">
+            <form method="post">
+                <div class="auth-input-group">
+                    <label asp-for="Input.AdminUsername" class="auth-label">Nome Admin</label>
+                    <div class="input-with-icon">
+                        <input asp-for="Input.AdminUsername" class="auth-input" autofocus />
+                        <span class="auth-input-icon">
+                            <i class="fas fa-user-shield"></i>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Input.AdminUsername" class="auth-validation-error"></span>
+                </div>
+
+                <div class="auth-input-group">
+                    <label asp-for="Input.Password" class="auth-label">Password</label>
+                    <div class="input-with-icon">
+                        <input asp-for="Input.Password" class="auth-input" />
+                        <span class="auth-input-icon">
+                            <i class="fas fa-lock"></i>
+                        </span>
+                    </div>
+                    <span asp-validation-for="Input.Password" class="auth-validation-error"></span>
+                </div>
+
+                <button type="submit" class="auth-button">
+                    <span class="button-glow"></span>
+                    <span>ACCESSO ADMIN</span>
+                </button>
+            </form>
+
+            <!-- Credenziali di Default -->
+            <div class="auth-info">
+                <p><strong>Credenziali di default per il test:</strong></p>
+                <ul>
+                    <li><strong>Nome Admin:</strong> admin</li>
+                    <li><strong>Password:</strong> admin123</li>
+                </ul>
+            </div>
+        </div>
+        <div class="auth-frame-footer">
+            <div class="footer-decoration"></div>
+            <div class="footer-text">© 2025 DotaDude - Tutti i diritti riservati</div>
+        </div>
+    </div>
+</div>

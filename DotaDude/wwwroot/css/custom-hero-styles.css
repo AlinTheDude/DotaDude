@@ -1,0 +1,780 @@
+﻿/* Enhanced DotaDude Custom Hero Styles
+   Redesigned for a more authentic Dota 2 feel */
+
+/* Base styles and animations */
+@keyframes glow {
+    0% {
+        text-shadow: 0 0 10px rgba(255, 106, 0, 0.7), 0 0 20px rgba(255, 106, 0, 0.5);
+    }
+
+    50% {
+        text-shadow: 0 0 15px rgba(255, 106, 0, 0.9), 0 0 30px rgba(255, 106, 0, 0.7);
+    }
+
+    100% {
+        text-shadow: 0 0 10px rgba(255, 106, 0, 0.7), 0 0 20px rgba(255, 106, 0, 0.5);
+    }
+}
+
+@keyframes pulse-border {
+    0% {
+        border-color: rgba(255, 106, 0, 0.6);
+    }
+
+    50% {
+        border-color: rgba(255, 106, 0, 1);
+    }
+
+    100% {
+        border-color: rgba(255, 106, 0, 0.6);
+    }
+}
+
+@keyframes float {
+    0% {
+        transform: translateY(0px);
+    }
+
+    50% {
+        transform: translateY(-5px);
+    }
+
+    100% {
+        transform: translateY(0px);
+    }
+}
+
+/* Page container */
+.custom-hero-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    color: #cccccc;
+    background: url('/images/hero_bg_texture.jpg') center top no-repeat;
+    background-size: cover;
+    background-attachment: fixed;
+    position: relative;
+}
+
+    .custom-hero-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.75);
+        z-index: -1;
+    }
+
+/* Header styles */
+.hero-creation-header {
+    text-align: center;
+    margin-bottom: 40px;
+    position: relative;
+    padding: 30px 0;
+}
+
+    .hero-creation-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 200px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #ff6a00, transparent);
+    }
+
+    .hero-creation-header::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 300px;
+        height: 3px;
+        background: linear-gradient(90deg, transparent, #ff6a00, transparent);
+    }
+
+    .hero-creation-header h1 {
+        font-size: 42px;
+        text-transform: uppercase;
+        margin-bottom: 10px;
+        color: #fff;
+        font-family: 'Radiance', 'Trajan Pro', serif;
+        font-weight: 700;
+        letter-spacing: 3px;
+        animation: glow 2s infinite;
+        position: relative;
+        display: inline-block;
+    }
+
+        .hero-creation-header h1::before,
+        .hero-creation-header h1::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 2px;
+            background: #ff6a00;
+            transform: translateY(-50%);
+        }
+
+        .hero-creation-header h1::before {
+            left: -60px;
+        }
+
+        .hero-creation-header h1::after {
+            right: -60px;
+        }
+
+    .hero-creation-header p {
+        font-size: 18px;
+        color: #aaa;
+        font-style: italic;
+        max-width: 700px;
+        margin: 0 auto;
+    }
+
+/* Form container */
+.hero-creation-form {
+    background: rgba(15, 17, 21, 0.85);
+    border: 1px solid #333;
+    border-radius: 6px;
+    padding: 30px;
+    box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    position: relative;
+    z-index: 1;
+}
+
+    .hero-creation-form::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        background: linear-gradient(45deg, #ff6a00, transparent, #ff6a00, transparent);
+        border-radius: 8px;
+        z-index: -1;
+        opacity: 0.5;
+        animation: pulse-border 3s infinite;
+    }
+
+/* Form sections */
+.hero-form-section {
+    margin-bottom: 40px;
+    padding: 25px;
+    background: rgba(12, 14, 19, 0.8);
+    border-radius: 6px;
+    border-left: 4px solid #ff6a00;
+    transition: all 0.4s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .hero-form-section::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 100px;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 106, 0, 0.05));
+    }
+
+    .hero-form-section:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 106, 0, 0.3);
+    }
+
+.section-title {
+    color: #ff6a00;
+    font-size: 26px;
+    font-weight: 600;
+    margin-bottom: 25px;
+    text-transform: uppercase;
+    position: relative;
+    display: inline-block;
+    font-family: 'Radiance', 'Trajan Pro', serif;
+    letter-spacing: 1px;
+}
+
+    .section-title::before {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 100%;
+        height: 2px;
+        background: linear-gradient(90deg, #ff6a00, transparent);
+    }
+
+    .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -8px;
+        left: 0;
+        width: 30px;
+        height: 2px;
+        background: #ff6a00;
+        box-shadow: 0 0 10px #ff6a00;
+    }
+
+/* Form controls */
+.form-group {
+    margin-bottom: 20px;
+    position: relative;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    color: #ddd;
+    font-weight: 500;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+.form-group:focus-within label {
+    color: #ff6a00;
+}
+
+.dota-input,
+.dota-select,
+.dota-textarea {
+    width: 100%;
+    padding: 12px 15px;
+    background: rgba(0, 0, 0, 0.4);
+    border: 1px solid #444;
+    border-radius: 4px;
+    color: #fff;
+    transition: all 0.3s ease;
+    font-size: 16px;
+}
+
+    .dota-input:focus,
+    .dota-select:focus,
+    .dota-textarea:focus {
+        border-color: #ff6a00;
+        box-shadow: 0 0 8px rgba(255, 106, 0, 0.6);
+        outline: none;
+        background: rgba(0, 0, 0, 0.6);
+    }
+
+.dota-textarea {
+    resize: vertical;
+    min-height: 100px;
+}
+
+.dota-select {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='6' fill='%23ff6a00'%3E%3Cpath d='M0 0l6 6 6-6z'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 15px center;
+    padding-right: 40px;
+}
+
+/* Attributes section */
+.attributes-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 25px;
+}
+
+.attribute-group {
+    padding: 20px;
+    border-radius: 6px;
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+}
+
+    .attribute-group::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-position: center;
+        background-repeat: no-repeat;
+        background-size: 60px;
+        opacity: 0.1;
+        z-index: 0;
+    }
+
+    .attribute-group h3 {
+        margin-bottom: 20px;
+        font-size: 22px;
+        font-weight: 600;
+        position: relative;
+        z-index: 1;
+        text-align: center;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .attribute-group.str {
+        background: rgba(238, 55, 55, 0.15);
+        border: 1px solid rgba(238, 55, 55, 0.3);
+    }
+
+        .attribute-group.str::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ee3737'%3E%3Cpath d='M7 22l10-10v-8h-8l-10 10z'/%3E%3C/svg%3E");
+        }
+
+        .attribute-group.str h3 {
+            color: #ee3737;
+            text-shadow: 0 0 5px rgba(238, 55, 55, 0.3);
+        }
+
+    .attribute-group.agi {
+        background: rgba(52, 211, 53, 0.15);
+        border: 1px solid rgba(52, 211, 53, 0.3);
+    }
+
+        .attribute-group.agi::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%2334d335'%3E%3Cpath d='M12 2L2 12h6v10h8V12h6z'/%3E%3C/svg%3E");
+        }
+
+        .attribute-group.agi h3 {
+            color: #34d335;
+            text-shadow: 0 0 5px rgba(52, 211, 53, 0.3);
+        }
+
+    .attribute-group.int {
+        background: rgba(53, 145, 245, 0.15);
+        border: 1px solid rgba(53, 145, 245, 0.3);
+    }
+
+        .attribute-group.int::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%233591f5'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2z'/%3E%3C/svg%3E");
+        }
+
+        .attribute-group.int h3 {
+            color: #3591f5;
+            text-shadow: 0 0 5px rgba(53, 145, 245, 0.3);
+        }
+
+/* Stats grid */
+.stats-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+}
+
+/* Abilities section */
+.ability-block {
+    position: relative;
+    background: rgba(29, 35, 45, 0.8);
+    border-radius: 6px;
+    padding: 20px;
+    margin-bottom: 25px;
+    border-left: 4px solid #9c6bbc;
+    transition: all 0.3s ease;
+    overflow: hidden;
+}
+
+    .ability-block::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        right: 0;
+        width: 80px;
+        height: 80px;
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%239c6bbc' opacity='0.1'%3E%3Cpath d='M17.66 8L12 2.35 6.34 8C4.78 9.56 4 11.64 4 13.64s.78 4.11 2.34 5.67 3.61 2.35 5.66 2.35 4.1-.79 5.66-2.35S20 15.64 20 13.64s-.78-4.08-2.34-5.64z'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right top;
+        background-size: contain;
+        opacity: 0.1;
+    }
+
+    .ability-block:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(156, 107, 188, 0.3);
+    }
+
+    .ability-block.ultimate {
+        border-left: 4px solid #ffcc00;
+        background: rgba(40, 35, 20, 0.8);
+    }
+
+        .ability-block.ultimate::before {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='%23ffcc00' opacity='0.2'%3E%3Cpath d='M12 17.27L18.18 21l-1.64-7.03L22 9.24l-7.19-.61L12 2 9.19 8.63 2 9.24l5.46 4.73L5.82 21z'/%3E%3C/svg%3E");
+        }
+
+        .ability-block.ultimate:hover {
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(255, 204, 0, 0.3);
+        }
+
+.ability-header {
+    color: #9c6bbc;
+    font-size: 22px;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    position: relative;
+    display: inline-block;
+}
+
+    .ability-header::after {
+        content: '';
+        position: absolute;
+        bottom: -5px;
+        left: 0;
+        width: 50%;
+        height: 2px;
+        background: linear-gradient(90deg, #9c6bbc, transparent);
+    }
+
+.ability-block.ultimate .ability-header {
+    color: #ffcc00;
+}
+
+    .ability-block.ultimate .ability-header::after {
+        background: linear-gradient(90deg, #ffcc00, transparent);
+    }
+
+.ability-details {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 20px;
+}
+
+/* Roles section */
+.role-checkboxes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 15px;
+}
+
+.role-checkbox {
+    display: flex;
+    align-items: center;
+    margin-bottom: 8px;
+    position: relative;
+    padding-left: 40px;
+    cursor: pointer;
+}
+
+    .role-checkbox input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .role-checkbox label {
+        margin-bottom: 0;
+        cursor: pointer;
+        font-size: 16px;
+        transition: all 0.3s ease;
+    }
+
+        .role-checkbox label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 24px;
+            width: 24px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #444;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+    .role-checkbox:hover label::before {
+        border-color: #ff6a00;
+    }
+
+    .role-checkbox input:checked ~ label::before {
+        background: #ff6a00;
+        border-color: #ff6a00;
+    }
+
+    .role-checkbox label::after {
+        content: '';
+        position: absolute;
+        left: 9px;
+        top: 5px;
+        width: 6px;
+        height: 12px;
+        border: solid white;
+        border-width: 0 2px 2px 0;
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .role-checkbox input:checked ~ label::after {
+        opacity: 1;
+    }
+
+/* Visibility options */
+.visibility-option {
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    padding-left: 40px;
+    margin-bottom: 15px;
+}
+
+    .visibility-option input[type="checkbox"] {
+        position: absolute;
+        opacity: 0;
+        cursor: pointer;
+        height: 0;
+        width: 0;
+    }
+
+    .visibility-option label {
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        color: #fff;
+        margin-bottom: 5px;
+        cursor: pointer;
+    }
+
+        .visibility-option label::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 28px;
+            width: 28px;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid #444;
+            border-radius: 3px;
+            transition: all 0.3s ease;
+        }
+
+    .visibility-option:hover label::before {
+        border-color: #ff6a00;
+    }
+
+    .visibility-option input:checked ~ label::before {
+        background: #ff6a00;
+        border-color: #ff6a00;
+    }
+
+    .visibility-option label::after {
+        content: '';
+        position: absolute;
+        left: 10px;
+        top: 5px;
+        width: 8px;
+        height: 15px;
+        border: solid white;
+        border-width: 0 3px 3px 0;
+        transform: rotate(45deg);
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .visibility-option input:checked ~ label::after {
+        opacity: 1;
+    }
+
+.option-description {
+    color: #aaa;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Action buttons */
+.form-actions {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 40px;
+}
+
+.dota-button {
+    padding: 14px 30px;
+    border: none;
+    border-radius: 4px;
+    text-transform: uppercase;
+    font-weight: 600;
+    letter-spacing: 2px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    font-size: 16px;
+}
+
+    .dota-button::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        right: -2px;
+        bottom: -2px;
+        z-index: -1;
+        background: linear-gradient(45deg, #ff6a00, #ff4500, #ff6a00, #ff4500);
+        background-size: 400%;
+        border-radius: 6px;
+        animation: glowing 20s linear infinite;
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+@keyframes glowing {
+    0% {
+        background-position: 0 0;
+    }
+
+    50% {
+        background-position: 400% 0;
+    }
+
+    100% {
+        background-position: 0 0;
+    }
+}
+
+.primary-button {
+    background: linear-gradient(to bottom, #ff6a00, #ff4500);
+    color: #fff;
+    box-shadow: 0 3px 10px rgba(255, 106, 0, 0.4);
+    min-width: 180px;
+    font-size: 18px;
+}
+
+    .primary-button:hover {
+        background: linear-gradient(to bottom, #ff7e1f, #ff5a1f);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(255, 106, 0, 0.6);
+    }
+
+        .primary-button:hover::before {
+            opacity: 1;
+            filter: blur(10px);
+        }
+
+.secondary-button {
+    background: linear-gradient(to bottom, #333, #222);
+    color: #ddd;
+    box-shadow: 0 3px 10px rgba(0, 0, 0, 0.4);
+}
+
+    .secondary-button:hover {
+        background: linear-gradient(to bottom, #444, #333);
+        transform: translateY(-3px);
+        box-shadow: 0 6px 15px rgba(0, 0, 0, 0.6);
+    }
+
+/* Alert messages */
+.alert {
+    margin-bottom: 20px;
+    padding: 15px;
+    border-radius: 4px;
+    border-left: 4px solid;
+}
+
+.alert-danger {
+    background: rgba(220, 53, 69, 0.1);
+    border-color: #dc3545;
+    color: #f8d7da;
+}
+
+.alert-success {
+    background: rgba(40, 167, 69, 0.1);
+    border-color: #28a745;
+    color: #d4edda;
+}
+
+/* Responsive adjustments */
+@media screen and (max-width: 992px) {
+    .attributes-grid,
+    .stats-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .role-checkboxes {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media screen and (max-width: 768px) {
+    .ability-details {
+        grid-template-columns: 1fr;
+    }
+
+    .role-checkboxes {
+        grid-template-columns: 1fr;
+    }
+
+    .form-actions {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .dota-button {
+        width: 100%;
+    }
+}
+
+/* Custom form validation styling */
+input:invalid,
+textarea:invalid,
+select:invalid {
+    border-color: #dc3545;
+}
+
+.text-danger {
+    color: #dc3545;
+    font-size: 14px;
+    margin-top: 5px;
+}
+
+/* Floating labels effect (optional) */
+.form-group.floating-label {
+    position: relative;
+}
+
+    .form-group.floating-label label {
+        position: absolute;
+        top: 12px;
+        left: 15px;
+        background: transparent;
+        transition: all 0.2s ease;
+        pointer-events: none;
+    }
+
+    .form-group.floating-label .dota-input:focus ~ label,
+    .form-group.floating-label .dota-input:not(:placeholder-shown) ~ label,
+    .form-group.floating-label .dota-textarea:focus ~ label,
+    .form-group.floating-label .dota-textarea:not(:placeholder-shown) ~ label {
+        top: -10px;
+        left: 10px;
+        font-size: 12px;
+        padding: 0 5px;
+        background: #0f1115;
+        color: #ff6a00;
+    }
+
+/* Attack range field visibility toggle */
+.attack-range-field {
+    transition: opacity 0.3s ease, max-height 0.3s ease;
+    max-height: 100px;
+    opacity: 1;
+}
+
+    .attack-range-field.hidden {
+        max-height: 0;
+        opacity: 0;
+        overflow: hidden;
+        margin: 0;
+        padding: 0;
+    }

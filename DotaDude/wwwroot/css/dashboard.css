@@ -1,0 +1,513 @@
+﻿:root {
+    --dota-primary: #000000;
+    --dota-secondary: #0e1215;
+    --dota-highlight: #ff6600;
+    --dota-red: #ff3333;
+    --dota-green: #00ff66;
+    --dota-border: #4e2b05;
+    --dota-text: #ffffff;
+    --dota-accent: #b44600;
+    --dota-glow: rgba(255, 102, 0, 0.7);
+    --font-family: 'Reaver', 'Trajan Pro', 'Segoe UI', Tahoma, sans-serif;
+}
+
+/* Sfondo della dashboard */
+.dashboard-container {
+    background-color: var(--dota-primary);
+    background-image: url('/images/dashboard-bg.jpg'), radial-gradient(circle at center, #101620 0%, #000000 100%);
+    background-size: cover;
+    background-blend-mode: overlay;
+    min-height: 100vh;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+}
+
+    .dashboard-container::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: url('/images/rune-pattern.png');
+        opacity: 0.05;
+        z-index: 0;
+        pointer-events: none;
+    }
+
+/* Header della dashboard */
+.dashboard-header {
+    width: 100%;
+    background: linear-gradient(to bottom, #1a1a1a, transparent);
+    border-bottom: 2px solid var(--dota-highlight);
+    padding: 20px;
+    text-align: center;
+    position: relative;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.7);
+    margin-bottom: 30px;
+    z-index: 1;
+}
+
+    .dashboard-header h2 {
+        color: var(--dota-highlight);
+        font-size: 36px;
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 3px;
+        text-shadow: 0 0 10px var(--dota-glow), 0 0 20px var(--dota-glow);
+        font-family: var(--font-family);
+        margin: 0;
+        position: relative;
+        display: inline-block;
+    }
+
+        .dashboard-header h2::before,
+        .dashboard-header h2::after {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 50px;
+            height: 2px;
+            background: var(--dota-highlight);
+            box-shadow: 0 0 10px var(--dota-glow);
+        }
+
+        .dashboard-header h2::before {
+            right: 105%;
+        }
+
+        .dashboard-header h2::after {
+            left: 105%;
+        }
+
+    .dashboard-header .header-decoration {
+        position: absolute;
+        top: 50%;
+        transform: translateY(-50%);
+        width: 80px;
+        height: 40px;
+        opacity: 0.9;
+        filter: drop-shadow(0 0 5px var(--dota-glow));
+    }
+
+        .dashboard-header .header-decoration.left {
+            left: 20px;
+            background: url('/images/dota-decor-left.png') no-repeat center;
+            background-size: contain;
+            transform: translateY(-50%) rotate(-5deg);
+        }
+
+        .dashboard-header .header-decoration.right {
+            right: 20px;
+            background: url('/images/dota-decor-right.png') no-repeat center;
+            background-size: contain;
+            transform: translateY(-50%) rotate(5deg);
+        }
+
+.dashboard-content {
+    position: relative;
+    z-index: 1;
+    width: 100%;
+    max-width: 1200px;
+}
+
+/* Profilo eroe */
+.hero-profile-card {
+    background: linear-gradient(135deg, #161c24, #0a0d14);
+    border: 2px solid var(--dota-border);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.8), inset 0 0 20px rgba(255, 102, 0, 0.1);
+    text-align: center;
+    width: 100%;
+    max-width: 300px;
+    margin-bottom: 20px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .hero-profile-card::before {
+        content: '';
+        position: absolute;
+        top: -50%;
+        left: -50%;
+        width: 200%;
+        height: 200%;
+        background: radial-gradient(ellipse at center, rgba(255, 102, 0, 0.1) 0%, rgba(0, 0, 0, 0) 70%);
+        animation: rotate 20s linear infinite;
+        pointer-events: none;
+    }
+
+    .hero-profile-card .hero-avatar {
+        position: relative;
+        width: 120px;
+        height: 120px;
+        margin: 0 auto 15px;
+    }
+
+        .hero-profile-card .hero-avatar img {
+            border-radius: 50%;
+            border: 3px solid var(--dota-highlight);
+            box-shadow: 0 0 20px var(--dota-glow);
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero-profile-card .hero-avatar::before {
+            content: '';
+            position: absolute;
+            top: -5px;
+            left: -5px;
+            right: -5px;
+            bottom: -5px;
+            border-radius: 50%;
+            background: linear-gradient(45deg, var(--dota-highlight), transparent, var(--dota-highlight), transparent);
+            background-size: 400% 400%;
+            z-index: 0;
+            animation: borderGlow 3s ease infinite;
+        }
+
+    .hero-profile-card h3 {
+        color: var(--dota-highlight);
+        font-size: 26px;
+        margin-top: 15px;
+        text-shadow: 0 0 10px var(--dota-glow);
+        text-transform: uppercase;
+        font-family: var(--font-family);
+        letter-spacing: 1px;
+    }
+
+    .hero-profile-card .hero-role {
+        margin-top: 15px;
+        color: var(--dota-text);
+        font-size: 16px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+        .hero-profile-card .hero-role .role-icon {
+            width: 24px;
+            height: 24px;
+            margin-right: 10px;
+            background-size: contain;
+            background-repeat: no-repeat;
+            filter: drop-shadow(0 0 3px var(--dota-glow));
+        }
+
+    .hero-profile-card .hero-stats {
+        margin-top: 25px;
+        text-align: left;
+        background: rgba(0, 0, 0, 0.3);
+        border-radius: 5px;
+        padding: 10px;
+        border: 1px solid rgba(255, 102, 0, 0.2);
+    }
+
+    .hero-profile-card .stat {
+        display: flex;
+        justify-content: space-between;
+        color: var(--dota-text);
+        font-size: 14px;
+        margin-bottom: 8px;
+        padding-bottom: 8px;
+        border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+        .hero-profile-card .stat:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .hero-profile-card .stat .stat-label {
+            color: #aaa;
+        }
+
+        .hero-profile-card .stat .stat-value {
+            font-weight: bold;
+            color: #fff;
+        }
+
+/* Pannelli della dashboard */
+.dashboard-panel {
+    background: linear-gradient(135deg, #161c24, #0a0d14);
+    border: 2px solid var(--dota-border);
+    border-radius: 10px;
+    padding: 25px;
+    box-shadow: 0 0 25px rgba(0, 0, 0, 0.7), inset 0 0 20px rgba(255, 102, 0, 0.05);
+    margin-bottom: 25px;
+    position: relative;
+    overflow: hidden;
+}
+
+    .dashboard-panel::after {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 2px;
+        background: linear-gradient(to right, transparent, var(--dota-highlight), transparent);
+        opacity: 0.7;
+    }
+
+.panel-header {
+    border-bottom: 2px solid rgba(255, 102, 0, 0.3);
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    text-align: center;
+    position: relative;
+}
+
+    .panel-header::before {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: -2px;
+        width: 100px;
+        height: 2px;
+        background: var(--dota-highlight);
+        box-shadow: 0 0 10px var(--dota-glow);
+    }
+
+    .panel-header h4 {
+        color: var(--dota-highlight);
+        font-size: 22px;
+        text-transform: uppercase;
+        text-shadow: 0 0 8px var(--dota-glow);
+        font-family: var(--font-family);
+        letter-spacing: 1.5px;
+        margin: 0;
+    }
+
+.panel-content {
+    color: var(--dota-text);
+    font-size: 15px;
+    line-height: 1.7;
+}
+
+/* Pulsanti */
+.action-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 15px;
+    margin-top: 20px;
+}
+
+.dashboard-button {
+    display: inline-block;
+    background: linear-gradient(to bottom, var(--dota-highlight), var(--dota-accent));
+    color: #000;
+    border-radius: 5px;
+    padding: 12px 25px;
+    font-size: 16px;
+    font-weight: bold;
+    text-transform: uppercase;
+    text-align: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5), 0 0 15px rgba(255, 102, 0, 0.5);
+    text-decoration: none;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+    min-width: 180px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    letter-spacing: 1px;
+}
+
+    .dashboard-button::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: -100%;
+        width: 100%;
+        height: 100%;
+        background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+        transition: 0.5s;
+    }
+
+    .dashboard-button:hover {
+        transform: translateY(-3px);
+        background: linear-gradient(to bottom, #ff8833, var(--dota-highlight));
+        box-shadow: 0 7px 15px rgba(0, 0, 0, 0.7), 0 0 20px rgba(255, 102, 0, 0.7);
+        text-shadow: 0 0 5px rgba(255, 255, 255, 0.5);
+    }
+
+        .dashboard-button:hover::before {
+            left: 100%;
+        }
+
+    .dashboard-button i {
+        margin-right: 8px;
+        font-size: 18px;
+    }
+
+/* Attività recenti */
+.activity-feed {
+    border-radius: 5px;
+    padding: 5px 0;
+}
+
+.activity-item {
+    display: flex;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+    .activity-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+
+.activity-icon {
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 102, 0, 0.2);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 15px;
+    flex-shrink: 0;
+    color: var(--dota-highlight);
+    font-size: 16px;
+    box-shadow: 0 0 10px rgba(255, 102, 0, 0.3);
+}
+
+.activity-details {
+    flex-grow: 1;
+}
+
+.activity-text {
+    display: block;
+    color: #fff;
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.activity-time {
+    display: block;
+    color: #aaa;
+    font-size: 13px;
+}
+
+/* Effetti animati */
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 15px var(--dota-glow);
+    }
+
+    100% {
+        box-shadow: 0 0 30px var(--dota-glow);
+    }
+}
+
+@keyframes frame-glow {
+    0% {
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+    }
+
+    100% {
+        box-shadow: 0 0 30px rgba(0, 0, 0, 0.7);
+    }
+}
+
+@keyframes borderGlow {
+    0% {
+        background-position: 0% 50%;
+    }
+
+    50% {
+        background-position: 100% 50%;
+    }
+
+    100% {
+        background-position: 0% 50%;
+    }
+}
+
+@keyframes rotate {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+/* Animazione pulsante rampage */
+.dashboard-button.rampage {
+    animation: rampagePulse 2s infinite;
+    background: linear-gradient(to bottom, #ff3300, #cc2200);
+}
+
+@keyframes rampagePulse {
+    0% {
+        box-shadow: 0 0 10px rgba(255, 51, 0, 0.7);
+    }
+
+    50% {
+        box-shadow: 0 0 25px rgba(255, 51, 0, 1);
+    }
+
+    100% {
+        box-shadow: 0 0 10px rgba(255, 51, 0, 0.7);
+    }
+}
+
+/* Badge e notifiche */
+.badge {
+    display: inline-block;
+    background: var(--dota-red);
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 12px;
+    line-height: 20px;
+    text-align: center;
+    position: absolute;
+    top: -8px;
+    right: -8px;
+    box-shadow: 0 0 10px rgba(255, 51, 51, 0.7);
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .dashboard-header h2 {
+        font-size: 26px;
+    }
+
+    .hero-profile-card h3 {
+        font-size: 22px;
+    }
+
+    .dashboard-panel {
+        padding: 15px;
+    }
+
+    .action-buttons {
+        flex-direction: column;
+    }
+
+    .dashboard-button {
+        width: 100%;
+        margin-right: 0;
+        margin-bottom: 10px;
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+}

@@ -1,0 +1,129 @@
+﻿@page
+@model DotaDude.Pages.DashboardModel
+@{
+    ViewData["Title"] = "Dashboard";
+}
+
+<div class="dashboard-container">
+    <!-- Header della Dashboard -->
+    <div class="dashboard-header">
+        <div class="header-decoration left"></div>
+        <h2>DASHBOARD DELL'EROE</h2>
+        <div class="header-decoration right"></div>
+    </div>
+
+    <div class="dashboard-content">
+        <div class="row">
+            <!-- Profilo dell'Eroe -->
+            <div class="col-md-4">
+                <div class="hero-profile-card">
+                    <div class="hero-avatar">
+                        <img src="@Model.CurrentUser.AvatarUrl" alt="Avatar" />
+                    </div>
+                    <div class="hero-info">
+                        <h3>@Model.CurrentUser.Username</h3>
+                        <div class="hero-role">
+                            <div class="role-icon" style="background-image: url('/images/roles/@Model.CurrentUser.PreferredRole');"></div>
+                            <span class="role-name">@Model.GetRoleName(Model.CurrentUser.PreferredRole)</span>
+                        </div>
+                        <div class="hero-stats">
+                            <div class="stat">
+                                <span class="stat-label">Membro da</span>
+                                <span class="stat-value">@Model.CurrentUser.RegistrationDate.ToString("dd/MM/yyyy")</span>
+                            </div>
+                            <div class="stat">
+                                <span class="stat-label">Ultimo accesso</span>
+                                <span class="stat-value">@(Model.CurrentUser.LastLoginDate?.ToString("dd/MM/yyyy HH:mm") ?? "N/A")</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Contenuto della Dashboard -->
+            <div class="col-md-8">
+                <!-- Pannello Benvenuto -->
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <h4>Benvenuto in DotaDude!</h4>
+                    </div>
+                    <div class="panel-content">
+                        <p>Questa è la tua dashboard personale. Da qui puoi accedere a tutte le funzionalità della piattaforma.</p>
+                        <div class="action-buttons">
+                            <a href="#" class="dashboard-button">
+                                <i class="fas fa-search"></i> Cerca partite
+                            </a>
+                            <a href="#" class="dashboard-button">
+                                <i class="fas fa-trophy"></i> Classifiche
+                            </a>
+                            <a href="#" class="dashboard-button">
+                                <i class="fas fa-user-edit"></i> Modifica profilo
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Pannello Attività Recenti -->
+                <div class="dashboard-panel">
+                    <div class="panel-header">
+                        <h4>Attività recenti</h4>
+                    </div>
+                    <div class="panel-content">
+                        <div class="activity-feed">
+                            <div class="activity-item">
+                                <div class="activity-icon">
+                                    <i class="fas fa-sign-in-alt"></i>
+                                </div>
+                                <div class="activity-details">
+                                    <span class="activity-text">Hai effettuato l'accesso</span>
+                                    <span class="activity-time">Adesso</span>
+                                </div>
+                            </div>
+
+                            @if (Model.CurrentUser.RegistrationDate.Date == DateTime.Now.Date)
+                            {
+                                <div class="activity-item">
+                                    <div class="activity-icon">
+                                        <i class="fas fa-user-plus"></i>
+                                    </div>
+                                    <div class="activity-details">
+                                        <span class="activity-text">Ti sei registrato a DotaDude</span>
+                                        <span class="activity-time">Oggi</span>
+                                    </div>
+                                </div>
+                            }
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("Dashboard loaded.");
+
+            // Effetti per i pulsanti della dashboard
+            const dashboardButtons = document.querySelectorAll('.dashboard-button');
+            dashboardButtons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    if (window.audioEnabled) {
+                        const hoverSound = new Audio('/sounds/button_hover.mp3');
+                        hoverSound.volume = 0.2;
+                        hoverSound.play();
+                    }
+                });
+
+                button.addEventListener('click', () => {
+                    if (window.audioEnabled) {
+                        const clickSound = new Audio('/sounds/button_click.mp3');
+                        clickSound.volume = 0.3;
+                        clickSound.play();
+                    }
+                });
+            });
+        });
+    </script>
+}

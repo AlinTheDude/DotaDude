@@ -1,0 +1,149 @@
+﻿@page
+@model DotaDude.Pages.LoginModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="auth-container">
+    <!-- Elementi particellari Dota style -->
+    <div class="particles-container">
+        @for (var i = 0; i < 25; i++)
+        {
+            var size = new Random().Next(3, 8);
+            var posX = new Random().Next(5, 95);
+            var posY = new Random().Next(5, 95);
+            var duration = new Random().Next(5, 15);
+            var delay = new Random().Next(0, 7);
+            <div class="auth-ember" style="width: @(size)px; height: @(size)px; left: @(posX)%; bottom: @(posY)%; animation: float-up @(duration)s ease-out @(delay)s infinite;"></div>
+        }
+    </div>
+
+    <div class="auth-frame auth-fade-in">
+        <div class="auth-frame-header">
+            <div class="header-decoration left"></div>
+            <h2>ACCESSO EROE</h2>
+            <div class="header-decoration right"></div>
+        </div>
+        <div class="auth-frame-content">
+            <div class="row">
+                <div class="col-md-6">
+                    <form method="post">
+                        <!-- Campo nascosto per returnUrl -->
+                        <input type="hidden" name="returnUrl" value="@Model.ReturnUrl" />
+
+                        <div class="auth-input-group">
+                            <label asp-for="Input.Username" class="auth-label">Nome Eroe</label>
+                            <div class="input-with-icon">
+                                <input asp-for="Input.Username" class="auth-input" autofocus />
+                                <span class="auth-input-icon">
+                                    <i class="fas fa-user"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Input.Username" class="auth-validation-error"></span>
+                        </div>
+
+                        <div class="auth-input-group">
+                            <label asp-for="Input.Password" class="auth-label">Password</label>
+                            <div class="input-with-icon">
+                                <input asp-for="Input.Password" class="auth-input" />
+                                <span class="auth-input-icon">
+                                    <i class="fas fa-lock"></i>
+                                </span>
+                            </div>
+                            <span asp-validation-for="Input.Password" class="auth-validation-error"></span>
+                        </div>
+
+                        <button type="submit" class="auth-button">
+                            <span class="button-glow"></span>
+                            <span>ACCEDI AL CAMPO DI BATTAGLIA</span>
+                        </button>
+                    </form>
+
+                    <!-- Link per Login Admin -->
+                    <div class="auth-admin-login">
+                        <p>
+                            <a asp-page="./AdminLogin" class="auth-link auth-admin-link">Login come Admin</a>
+                        </p>
+                    </div>
+
+                    <div class="auth-links">
+                        <p>
+                            Non hai ancora un account? <a asp-page="./Register" class="auth-link">Registrati!</a>
+                        </p>
+                        <p>
+                            <a asp-page="./ForgotPassword" class="auth-link">Password dimenticata?</a>
+                        </p>
+
+                    </div>
+                </div>
+
+                <div class="col-md-6 text-center">
+                    <div class="auth-divider d-md-none">OPPURE</div>
+
+                    <div class="steam-login">
+                        <h4 class="steam-login-title">Accedi con</h4>
+                        <form asp-page-handler="Steam" method="post">
+                            <button type="submit" class="steam-button">
+                                <img src="~/images/steam_logo.png" alt="Steam Logo" class="steam-icon" />
+                                <span>Steam</span>
+                            </button>
+                        </form>
+                    </div>   
+                </div>
+            </div>
+        </div>
+    </div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Effetti sonori
+            const authButtons = document.querySelectorAll('.auth-button, .steam-button');
+            authButtons.forEach(button => {
+                button.addEventListener('mouseenter', () => {
+                    if (window.audioEnabled) {
+                        const hoverSound = new Audio('/sounds/button_hover.mp3');
+                        hoverSound.volume = 0.2;
+                        hoverSound.play();
+                    }
+                });
+
+                button.addEventListener('click', () => {
+                    if (window.audioEnabled) {
+                        const clickSound = new Audio('/sounds/button_click.mp3');
+                        clickSound.volume = 0.3;
+                        clickSound.play();
+                    }
+                });
+            });
+
+            // Animazione per gli input
+            const authInputs = document.querySelectorAll('.auth-input');
+            authInputs.forEach(input => {
+                input.addEventListener('focus', () => {
+                    input.parentElement.classList.add('input-focused');
+                });
+                input.addEventListener('blur', () => {
+                    input.parentElement.classList.remove('input-focused');
+                });
+            });
+
+            // Toggle password visibility
+            const passwordInput = document.querySelector('input[type="password"]');
+            const togglePasswordButton = document.createElement('button');
+            togglePasswordButton.type = 'button';
+            togglePasswordButton.className = 'toggle-password';
+            togglePasswordButton.innerHTML = '<i class="fas fa-eye"></i>';
+            togglePasswordButton.addEventListener('click', function () {
+                const type = passwordInput.getAttribute('type') === 'password' ? 'text' : 'password';
+                passwordInput.setAttribute('type', type);
+                this.innerHTML = type === 'password' ? '<i class="fas fa-eye"></i>' : '<i class="fas fa-eye-slash"></i>';
+            });
+
+            // Aggiungi il pulsante dopo l'icona del campo password
+            const passwordIconContainer = passwordInput.parentElement;
+            passwordIconContainer.appendChild(togglePasswordButton);
+        });
+    </script>
+}
